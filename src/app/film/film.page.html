@@ -1,9 +1,29 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>film</ion-title>
+    <ion-title>Film</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-searchbar
+  [(ngModel)]="film"
+  (ionChange)="getFilm($titre)">
+</ion-searchbar>
 
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <p>Titre : <ion-card-title>{{film.Title}}</ion-card-title></p>
+      <p>Sortie : <ion-card-title>{{film.Released}}</ion-card-title></p>
+      <p>Age : <ion-card-title>{{film.Rated}}</ion-card-title></p>
+      <p>Description : <ion-card-title>{{film.Plot}}</ion-card-title></p>
+      <p>Genre : <ion-card-title>{{film.Genre}}</ion-card-title></p>
+      <p>Durée : <ion-card-title>{{film.Runtime}}</ion-card-title></p>
+      <p>Producteur : <ion-card-title>{{film.Director}}</ion-card-title></p>
+      <p>Acteurs : <ion-card-title>{{film.Actors}}</ion-card-title></p>
+      <p>Awards : <ion-card-title>{{film.Awards}}</ion-card-title></p>
+      <p>Notes / Nombres de votes : <ion-card-title>{{film.imdbRating}} / {{film.imdbVotes}}</ion-card-title></p>
+      <p>Site web : <ion-card-title>{{film.Website}}</ion-card-title></p>
+      <p><img src={{film.Poster}} alt={{film.Title}} width='50' height='600'></p>
+    </ion-card-header>
+  </ion-card>
 </ion-content>
