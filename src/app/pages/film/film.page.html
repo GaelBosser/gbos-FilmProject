@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Film</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-searchbar [(ngModel)]="searchFilm" (ionChange)="getFilmSearchBar()"></ion-searchbar>
+<ion-select [(ngModel)]="page" (ionChange)="getFilmSearchBar()"> 
+    <ion-select-option *ngFor="let page of pages" value="{{page.Number}}"> 
+      {{page.Number}}
+    </ion-select-option> 
+</ion-select>
+
+
+<ion-content padding *ngIf="searchFilmBool">
+  <ion-list>
+      <div *ngFor="let film of films.Search">
+        <ion-card>
+          <ion-card-content padding>
+            <div style="color:black;">
+              <p>{{film.Title}}</p>
+              <p>Année de sortie : {{film.Year}}</p>
+              <p>Type : {{film.Type}}</p>
+              <div *ngIf="film.Poster == 'N/A', else elseBlockPosterImg">
+                <p>Aucun poster associé à ce film</p>
+              </div>
+              <ng-template #elseBlockPosterImg>
+                  <img src={{film.Poster}} alt={{film.Title}}>
+              </ng-template>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+  </ion-list>
+</ion-content>

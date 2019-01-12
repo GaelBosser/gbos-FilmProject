@@ -13,12 +13,20 @@ export class OmdbServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getFilmByTitle(title: string): Observable<any> {
-    const url = `${apiUrl}&t=${title}`;
+  getFilmBySearchTitle(title: string, page: number): Observable<any> {
+    const url = `${apiUrl}&s=${title}&type=movie&page=${page}`;
+    console.log(url);
     return this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError));
   }
+
+  /*getFilmById(id: string): Observable<any> {
+    const url = `${apiUrl}/${id}`;
+    return this.http.get(url, httpOptions).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }*/
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
