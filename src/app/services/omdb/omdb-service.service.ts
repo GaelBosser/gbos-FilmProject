@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, tap, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
 
 const apiUrl = "http://www.omdbapi.com/?apikey=75522b56";
 
@@ -13,9 +13,9 @@ export class OmdbServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getFilmBySearchTitle(title: string, page: number): Observable<any> {
-    const url = `${apiUrl}&s=${title}&type=movie&page=${page}`;
-    console.log(url);
+  getByTitle(title: string, type: string, page: number): Observable<any> {
+    const url = `${apiUrl}&s=${title}&type=${type}&page=${page}`;
+    //console.log(url);
     return this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError));

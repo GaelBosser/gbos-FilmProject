@@ -1,6 +1,6 @@
+
 import { Component, OnInit } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
-import { isEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-film',
@@ -11,23 +11,34 @@ export class FilmPage implements OnInit {
 
   searchFilmBool: boolean;
   searchFilm: string;
-  films: any;
+  filmIntrouvable: boolean;
+  data : any;
+  films = [];
   page: number = 1;
-  selectedPage: number;
-  pages: any[] = [ 
-    { Number: '1'}, 
-    { Number: '2' }
-    ]; 
+  type: string = "movie";
 
   async getFilmSearchBar() {
-    await this.api.getFilmBySearchTitle(this.searchFilm, this.page)
+    await this.api.getByTitle(this.searchFilm.trim(), this.type, this.page)
       .subscribe(res => {
-        console.log(res);
-        this.films = res;
+
+        this.data = res;
+        if(res.Response == "False")
+        {
+          this.filmIntrouvable = true;
+          this.films = [];
+        }
+        else
+        {
+          this.filmIntrouvable = false;
+          for(let i=0; i<this.data.Search.length; i++)
+          {
+            this.films.push(this.data.Search[i]);
+          }
+        }
         if(this.searchFilm.trim() == "")
         {
           this.searchFilmBool = false;
-        }
+        } 
         else
         {
           this.searchFilmBool = true;
@@ -37,11 +48,22 @@ export class FilmPage implements OnInit {
       });
   }
 
+  doInfinite(infiniteScroll): Promise<any> {
+    //console.log('Begin async operation');
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.page++;
+      this.getFilmSearchBar();
+
+        //console.log('Async operation has ended');
+        resolve();
+        infiniteScroll.target.complete();
+      }, 500);
+    })
+  }
+
   constructor(public api: OmdbServiceService) { }
 
-  ngOnInit() {
-    this.searchFilmBool = false;
-    this.selectedPage = this.pages[0].Number;
-    console.log(this.selectedPage);
-  }
+  ngOnInit() {}
 }
