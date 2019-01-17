@@ -15,6 +15,7 @@ export class SeriePage implements OnInit {
   series = [];
   page: number = 1;
   type: string = "series";
+  displaySearchBar: boolean = true;
 
   async getSerieSearchBar() {
     await this.api.getByTitle(this.searchSerie.trim(), this.type, this.page)
@@ -46,6 +47,9 @@ export class SeriePage implements OnInit {
       });
   }
 
+  searchbarEvent(event) {
+    this.displaySearchBar = !this.displaySearchBar;
+  }
 
   doInfinite(infiniteScroll): Promise<any> {
     //console.log('Begin async operation');

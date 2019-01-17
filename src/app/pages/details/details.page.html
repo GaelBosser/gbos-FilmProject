@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Fiche détails</ion-title>
+    <ion-buttons slot="start"> <ion-back-button defaultHref="film"></ion-back-button> </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div>
+        <ion-card *ngIf="detailsMovie">
+          <ion-card-content padding>
+            <div style="color:black;">
+              <p>Titre : {{detailsMovie.Title}}</p>
+              <p>Année de sortie : {{detailsMovie.Year}}</p>
+              <p>Recommandation d'âge : {{detailsMovie.Rated}}</p>
+              <p>Description : {{detailsMovie.Plot}}</p>
+              <p>Type : {{detailsMovie.Type}}</p>
+              <p>Durée : {{detailsMovie.Runtime}}</p>
+              <p>Producteur : {{detailsMovie.Director}}</p>
+              <p>Acteurs : {{detailsMovie.Actors}}</p>
+              <p>Récompenses : {{detailsMovie.Awards}}</p>
+              <p>Notes / Votes : {{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
+              <p>Site web : {{detailsMovie.Website}}</p>
+            </div>
+            <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
+              <p>Aucun poster associé à ce film</p>
+            </div>
+            <ng-template #elseBlockPosterImg>
+                <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+</ion-content>

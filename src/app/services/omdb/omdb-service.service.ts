@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
@@ -20,13 +19,14 @@ export class OmdbServiceService {
       map(this.extractData),
       catchError(this.handleError));
   }
-
-  /*getFilmById(id: string): Observable<any> {
-    const url = `${apiUrl}/${id}`;
-    return this.http.get(url, httpOptions).pipe(
+  
+  getDetailMovieById(id: string, plot: string): Observable<any> {
+    const url = `${apiUrl}&i=${id}&plot=${plot}`;
+    //console.log(url);
+    return this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError));
-  }*/
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

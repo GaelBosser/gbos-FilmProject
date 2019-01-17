@@ -11,17 +11,24 @@ export class FilmPage implements OnInit {
 
   searchFilmBool: boolean;
   searchFilm: string;
+  lastSearchFilm: string;
   filmIntrouvable: boolean;
   data : any;
   films = [];
   page: number = 1;
   type: string = "movie";
+  displaySearchBar: boolean = true;
 
   async getFilmSearchBar() {
     await this.api.getByTitle(this.searchFilm.trim(), this.type, this.page)
       .subscribe(res => {
-
         this.data = res;
+        
+        if(this.lastSearchFilm != this.searchFilm)
+        {
+          this.films = [];
+        }
+
         if(res.Response == "False")
         {
           this.filmIntrouvable = true;
@@ -43,14 +50,19 @@ export class FilmPage implements OnInit {
         {
           this.searchFilmBool = true;
         }
+
+        this.lastSearchFilm = this.searchFilm;
       }, err => {
         console.log(err);
       });
   }
 
+  searchbarEventClick(event) {
+    this.displaySearchBar = !this.displaySearchBar;
+  }
+
   doInfinite(infiniteScroll): Promise<any> {
     //console.log('Begin async operation');
-
     return new Promise((resolve) => {
       setTimeout(() => {
         this.page++;

@@ -1,15 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Films</ion-title>
-        <ion-buttons slot="secondary" class="larger">
-          <button ion-button icon-only>
-            <ion-icon name="md-search"></ion-icon>
-          </button>
-        </ion-buttons>
+      <button ion-button large slot="secondary" (click)="searchbarEventClick($event)">
+        <ion-icon name="md-search"></ion-icon>
+      </button>
   </ion-toolbar>
 </ion-header>
 
-<ion-searchbar [(ngModel)]="searchFilm" (ionChange)="getFilmSearchBar()"></ion-searchbar>
+<ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher un film" [(ngModel)]="searchFilm" (ionChange)="getFilmSearchBar()"></ion-searchbar>
 
 <ion-content padding>
   <ion-list *ngIf="searchFilmBool">
@@ -17,7 +15,7 @@
         <p>Aucun film n'a été trouvé pour la recherche suivante : <b>{{searchFilm}}</b></p>
       </div>
       <div *ngFor="let film of films">
-        <ion-card>
+        <ion-card routerLink="/detail/{{film.imdbID}}" >
           <ion-card-content padding>
             <div style="color:black;">
               <p>{{film.Title}}</p>
