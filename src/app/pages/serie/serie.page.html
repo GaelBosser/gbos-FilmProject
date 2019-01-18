@@ -15,7 +15,7 @@
         <p>Aucune série n'a été trouvée pour la recherche suivante : <b>{{searchSerie}}</b></p>
       </div>
       <div *ngFor="let serie of series">
-        <ion-card>
+        <ion-card routerLink="/detail/{{serie.imdbID}}">
           <ion-card-content padding>
             <div style="color:black;">
               <p>{{serie.Title}}</p>

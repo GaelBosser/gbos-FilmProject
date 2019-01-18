@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Fiche détails</ion-title>
-    <ion-buttons slot="start"> <ion-back-button defaultHref="film"></ion-back-button> </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,6 +24,11 @@
               <p>Récompenses : {{detailsMovie.Awards}}</p>
               <p>Notes / Votes : {{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
               <p>Site web : {{detailsMovie.Website}}</p>
+            </div>
+            <div *ngIf="detailsMovie.Type == 'series'">
+                <span *ngFor="let season of seasonArray;">
+                  <a href="/detail/{{detailsMovie.imdbID}}?season={{season}}"><p>Saison {{season}}</p></a>
+                </span>
             </div>
             <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
               <p>Aucun poster associé à ce film</p>

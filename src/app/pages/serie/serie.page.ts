@@ -10,6 +10,7 @@ export class SeriePage implements OnInit {
 
   searchSerieBool: boolean;
   searchSerie: string;
+  lastSearchSerie: string;
   serieIntrouvable: boolean;
   data : any;
   series = [];
@@ -21,6 +22,12 @@ export class SeriePage implements OnInit {
     await this.api.getByTitle(this.searchSerie.trim(), this.type, this.page)
       .subscribe(res => {
         this.data = res;
+
+        if(this.lastSearchSerie != this.searchSerie)
+        {
+          this.series = [];
+        }
+
         if(res.Response == "False")
         {
           this.serieIntrouvable = true;
@@ -42,6 +49,8 @@ export class SeriePage implements OnInit {
         {
           this.searchSerieBool = true;
         }
+
+        this.lastSearchSerie = this.searchSerie;
       }, err => {
         console.log(err);
       });
