@@ -12,17 +12,13 @@ export class FavoriePage implements OnInit {
   favoriteMovies = [];
 
   constructor(public favorieMovieService: FavorieMovieService) { }
-
-  ionViewDidLoad() {
-    console.log("ionViewDidLoad MyMoviesPage");
-  }
  
   ionViewWillEnter() {
     this.initFavoriteMovies();
   }
  
   private initFavoriteMovies() {
-    this.favorieMovieService.getFavoriteMovies().then(favs => (this.favoriteMovies = favs));
+    this.favorieMovieService.getFavoritesMovies().then(favs => (this.favoriteMovies = favs));
   }
  
   findMovie() {

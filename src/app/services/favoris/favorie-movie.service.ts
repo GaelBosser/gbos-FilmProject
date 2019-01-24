@@ -16,12 +16,12 @@ export class FavorieMovieService {
     this.storage.remove(this.getMovieKey(movie));
   }
  
-  isFavortieMovie(movie: any) {
+  isFavoriteMovie(movie: any) {
     return this.storage.get(this.getMovieKey(movie));
   }
  
   toogleFavoriteMovie(movie: any) {
-    this.isFavortieMovie(movie).then(
+    this.isFavoriteMovie(movie).then(
       isFavorite =>
         isFavorite
           ? this.removeFavoriteMovie(movie)
@@ -33,7 +33,7 @@ export class FavorieMovieService {
     return MOVIE_KEY + movie.imdbID;
   }
  
-  getFavoriteMovies(): Promise<any[]> {
+  getFavoritesMovies(): Promise<any[]> {
     return new Promise(resolve => {
       let results: any[] = [];
       this.storage
@@ -50,6 +50,5 @@ export class FavorieMovieService {
   }
 
   constructor(private storage: Storage) {
-    console.log("Hello UserPreferencesProvider Provider");
   }
 }

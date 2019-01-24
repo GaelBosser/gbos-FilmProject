@@ -16,7 +16,6 @@ export class DetailsPage implements OnInit {
   plot: string = "full";
   id: string;
   seasonArray = [];
-  favorite: boolean = false;
   isFavorite: boolean = false;
 
   async getDetailMovie() {
@@ -51,12 +50,9 @@ export class DetailsPage implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetailMovie();
-    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.isFavorite = value));
-    console.log(this.isFavorite);
   }
-  ionViewDidLoad() {
-    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.favorite = value));
-    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.isFavorite = value));
-    console.log('la' + this.isFavorite);
+
+  ionViewDidEnter(){
+    this.favoriteMovieService.isFavoriteMovie(this.detailsMovie).then(value => (this.isFavorite = value));
   }
 }
