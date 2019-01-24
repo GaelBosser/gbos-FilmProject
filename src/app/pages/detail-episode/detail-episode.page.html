@@ -19,7 +19,17 @@
               <p>Description {{detailEpisode.Plot}}</p>
               <p>Sortie {{detailEpisode.Released}}</p>
               <p>Durée {{detailEpisode.Runtime}}</p>
-              <p>Note {{detailEpisode.imdbRating}}</p>
+              <p>Note / Votes {{detailEpisode.imdbRating}} / {{detailEpisode.imdbVotes}}</p>
+              <p>Genre {{detailEpisode.Genre}}</p>
+              <p>Producteur {{detailEpisode.Director}}</p>
+              <p>Acteurs {{detailEpisode.Actors}}</p>
+              <p>Awards {{detailEpisode.Awards}}</p>
+              <div *ngIf="detailEpisode.Poster == 'N/A', else elseBlockPosterImg">
+                <p>Aucun poster associé à ce film</p>
+              </div>
+              <ng-template #elseBlockPosterImg>
+                  <img src={{detailEpisode.Poster}} alt={{detailEpisode.Title}} class="imgPosterResize">
+              </ng-template>
             </div>
           </ion-card-content>
         </ion-card>

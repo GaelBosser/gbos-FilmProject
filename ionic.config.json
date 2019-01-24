@@ -1,6 +1,8 @@
 {
   "name": "gbos-projetFilmsIonic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "64f04459"
 }

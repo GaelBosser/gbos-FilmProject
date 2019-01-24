@@ -4,6 +4,11 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
     </ion-buttons>
+    <ion-buttons end>
+        <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
+          <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
+        </button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -18,6 +23,7 @@
           <p>Recommandation d'âge : {{detailsMovie.Rated}}</p>
           <p>Description : {{detailsMovie.Plot}}</p>
           <p>Type : {{detailsMovie.Type}}</p>
+          <p>Genre : {{detailsMovie.Genre}}</p>
           <p>Durée : {{detailsMovie.Runtime}}</p>
           <p>Producteur : {{detailsMovie.Director}}</p>
           <p>Acteurs : {{detailsMovie.Actors}}</p>

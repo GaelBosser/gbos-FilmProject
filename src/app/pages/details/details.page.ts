@@ -1,3 +1,4 @@
+import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component, OnInit } from '@angular/core';
@@ -15,6 +16,8 @@ export class DetailsPage implements OnInit {
   plot: string = "full";
   id: string;
   seasonArray = [];
+  favorite: boolean = false;
+  isFavorite: boolean = false;
 
   async getDetailMovie() {
     await this.api.getDetailMovieById(this.id, this.plot)
@@ -31,17 +34,29 @@ export class DetailsPage implements OnInit {
       console.log(err);
     });
   }
+
+  toggleFavorite(): void {
+    this.isFavorite = !this.isFavorite;
+    this.favoriteMovieService.toogleFavoriteMovie(this.detailsMovie);
+  }
   
   backButtonClickEvent()
   {
     this.navCtrl.goBack();
   }
 
-  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController) { }
+  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController, 
+    public favoriteMovieService: FavorieMovieService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetailMovie();
+    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.isFavorite = value));
+    console.log(this.isFavorite);
   }
-
+  ionViewDidLoad() {
+    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.favorite = value));
+    this.favoriteMovieService.isFavortieMovie(this.id).then(value => (this.isFavorite = value));
+    console.log('la' + this.isFavorite);
+  }
 }
