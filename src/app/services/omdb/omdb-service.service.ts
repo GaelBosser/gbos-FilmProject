@@ -28,6 +28,22 @@ export class OmdbServiceService {
       catchError(this.handleError));
   }
 
+  getSeasonById(id: string, idSeason: string): Observable<any> {
+    const url = `${apiUrl}&i=${id}&Season=${idSeason}`;
+    //console.log(url);
+    return this.http.get(url).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  getEpisodeById(id: string, idSeason: string, idEpisode: string): Observable<any> {
+    const url = `${apiUrl}&i=${id}&Season=${idSeason}&Episode=${idEpisode}`;
+    //console.log(url);
+    return this.http.get(url).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

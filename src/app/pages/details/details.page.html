@@ -9,35 +9,35 @@
 
 <ion-content padding>
 
-    <div>
-        <ion-card *ngIf="detailsMovie">
-          <ion-card-content padding>
-            <div style="color:black;">
-              <p>Titre : {{detailsMovie.Title}}</p>
-              <p>Année de sortie : {{detailsMovie.Year}}</p>
-              <p>Recommandation d'âge : {{detailsMovie.Rated}}</p>
-              <p>Description : {{detailsMovie.Plot}}</p>
-              <p>Type : {{detailsMovie.Type}}</p>
-              <p>Durée : {{detailsMovie.Runtime}}</p>
-              <p>Producteur : {{detailsMovie.Director}}</p>
-              <p>Acteurs : {{detailsMovie.Actors}}</p>
-              <p>Récompenses : {{detailsMovie.Awards}}</p>
-              <p>Notes / Votes : {{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
-              <p>Site web : {{detailsMovie.Website}}</p>
-            </div>
-            <div *ngIf="detailsMovie.Type == 'series'">
-                <span *ngFor="let season of seasonArray;">
-                  <a href="/detail/{{detailsMovie.imdbID}}?season={{season}}"><p>Saison {{season}}</p></a>
-                </span>
-            </div>
-            <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
-              <p>Aucun poster associé à ce film</p>
-            </div>
-            <ng-template #elseBlockPosterImg>
-                <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
-            </ng-template>
-          </ion-card-content>
-        </ion-card>
-      </div>
+  <div>
+    <ion-card *ngIf="detailsMovie">
+      <ion-card-content padding>
+        <div style="color:black;">
+          <p>Titre : {{detailsMovie.Title}}</p>
+          <p>Année de sortie : {{detailsMovie.Year}}</p>
+          <p>Recommandation d'âge : {{detailsMovie.Rated}}</p>
+          <p>Description : {{detailsMovie.Plot}}</p>
+          <p>Type : {{detailsMovie.Type}}</p>
+          <p>Durée : {{detailsMovie.Runtime}}</p>
+          <p>Producteur : {{detailsMovie.Director}}</p>
+          <p>Acteurs : {{detailsMovie.Actors}}</p>
+          <p>Récompenses : {{detailsMovie.Awards}}</p>
+          <p>Notes / Votes : {{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
+          <p>Site web : {{detailsMovie.Website}}</p>
+        </div>
+        <div *ngIf="detailsMovie.Type == 'series'">
+            <span *ngFor="let season of seasonArray;">
+              <p routerLink="/detail/{{detailsMovie.imdbID}}/season/{{season}}">Saison {{season}}</p>
+            </span>
+        </div>
+        <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
+          <p>Aucun poster associé à ce film</p>
+        </div>
+        <ng-template #elseBlockPosterImg>
+            <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
 </ion-content>

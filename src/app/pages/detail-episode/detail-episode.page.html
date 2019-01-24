@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title *ngIf="detailEpisode">
+        Détail série {{detailSeason.Title}} Saison {{detailEpisode.Season}} Épisode {{detailEpisode.Episode}}
+      </ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <div *ngIf="detailEpisode">
+      <ion-list>
+        <ion-card>
+          <ion-card-content>
+            <div style="color:black;">
+              <p>Titre {{detailEpisode.Title}}</p>
+              <p>Description {{detailEpisode.Plot}}</p>
+              <p>Sortie {{detailEpisode.Released}}</p>
+              <p>Durée {{detailEpisode.Runtime}}</p>
+              <p>Note {{detailEpisode.imdbRating}}</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+  </ion-content>
+  

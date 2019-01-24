@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="detailSeason">Détail série {{detailSeason.Title}} Saison {{detailSeason.Season}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="detailSeason">
+    <ion-list>
+      <ion-card *ngFor="let episode of detailSeason.Episodes">
+        <ion-card-content routerLink="/detail/{{id}}/season/{{idSeason}}/episode/{{episode.Episode}}">
+          <div style="color:black;">
+            <p>Épisode {{episode.Episode}}</p>
+            <p>Titre {{episode.Title}}</p>
+            <p>Sortie {{episode.Released}}</p>
+            <p>Note {{episode.imdbRating}}</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+</ion-content>

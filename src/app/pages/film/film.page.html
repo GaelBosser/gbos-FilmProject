@@ -33,11 +33,15 @@
       </div>
   </ion-list>
 
-  <ion-infinite-scroll *ngIf="page <= 100" (ionInfinite)="(doInfinite($event))">
+  <ion-infinite-scroll *ngIf="page <= 100 && !endInfiniteScroll, else elseBlockEndInfiniteScroll" (ionInfinite)="(doInfinite($event))">
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="Chargement des données en cours...">
       </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ng-template #elseBlockEndInfiniteScroll>
+      <span>Aucune autre donnée à charger pour la recherche suivante : <b>{{searchFilm}}</b></span>
+  </ng-template>
 
 </ion-content>

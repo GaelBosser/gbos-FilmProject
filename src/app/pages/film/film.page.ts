@@ -18,6 +18,7 @@ export class FilmPage implements OnInit {
   page: number = 1;
   type: string = "movie";
   displaySearchBar: boolean = true;
+  endInfiniteScroll: boolean;
 
   async getFilmSearchBar() {
     await this.api.getByTitle(this.searchFilm.trim(), this.type, this.page)
@@ -27,6 +28,8 @@ export class FilmPage implements OnInit {
         if(this.lastSearchFilm != this.searchFilm)
         {
           this.films = [];
+          this.lastSearchFilm = this.searchFilm;
+          this.endInfiniteScroll = false;
         }
 
         if(res.Response == "False")
@@ -50,8 +53,6 @@ export class FilmPage implements OnInit {
         {
           this.searchFilmBool = true;
         }
-
-        this.lastSearchFilm = this.searchFilm;
       }, err => {
         console.log(err);
       });
@@ -65,9 +66,15 @@ export class FilmPage implements OnInit {
     //console.log('Begin async operation');
     return new Promise((resolve) => {
       setTimeout(() => {
-        this.page++;
-      this.getFilmSearchBar();
-
+        if(this.films.length < this.data.totalResults)
+        {
+          this.page++;
+          this.getFilmSearchBar();
+        }
+        else
+        {
+          this.endInfiniteScroll = true;
+        }
         //console.log('Async operation has ended');
         resolve();
         infiniteScroll.target.complete();
