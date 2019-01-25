@@ -22,7 +22,7 @@ export class DetailsPage implements OnInit {
     await this.api.getDetailMovieById(this.id, this.plot)
     .subscribe(res => {
       this.detailsMovie = res;
-      if(this.detailsMovie.Type == "series")
+      if(this.detailsMovie.Type == "series" && this.seasonArray.length == 0)
       {
         for(let i = 1; i <= parseInt(this.detailsMovie.totalSeasons); i++)
         {
@@ -49,10 +49,13 @@ export class DetailsPage implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+  }
+
+  ionViewWillEnter(){
     this.getDetailMovie();
   }
 
   ionViewDidEnter(){
-    this.favoriteMovieService.isFavoriteMovie(this.detailsMovie).then(value => (this.isFavorite = value));
+    this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value));
   }
 }

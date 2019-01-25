@@ -2,6 +2,7 @@ import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 
 @Component({
   selector: 'app-detail-episode',
@@ -15,6 +16,7 @@ export class DetailEpisodePage implements OnInit {
   idEpisode: string;
   detailEpisode : any;
   detailSeason: any;
+  isFavorite: boolean = false;
 
   async getDetailSeason() {
     await this.api.getSeasonById(this.id, this.idSeason)
@@ -34,11 +36,17 @@ export class DetailEpisodePage implements OnInit {
     });
   }
 
-  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController) { }
+  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController,
+    public favoriteMovieService: FavorieMovieService) { }
 
   backButtonClickEvent()
   {
     this.navCtrl.goBack();
+  }
+
+  toggleFavorite(): void {
+    this.isFavorite = !this.isFavorite;
+    this.favoriteMovieService.toogleFavoriteMovie(this.detailEpisode);
   }
 
   ngOnInit()
@@ -46,8 +54,15 @@ export class DetailEpisodePage implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.idSeason = this.route.snapshot.paramMap.get('idSeason');
     this.idEpisode = this.route.snapshot.paramMap.get('idEpisode');
+  }
+
+  ionViewWillEnter(){
     this.getDetailSeason();
     this.getDetailEpisode();
+  }
+
+  ionViewDidEnter(){
+    this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value));
   }
 
 }

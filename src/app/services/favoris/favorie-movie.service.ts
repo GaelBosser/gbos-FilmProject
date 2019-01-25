@@ -9,19 +9,19 @@ const MOVIE_KEY = "movie_";
 export class FavorieMovieService {
 
   addFavoriteMovie(movie: any) {
-    this.storage.set(this.getMovieKey(movie), JSON.stringify(movie));
+    this.storage.set(this.getMovieKey(movie.imdbID), JSON.stringify(movie));
   }
  
   removeFavoriteMovie(movie: any) {
-    this.storage.remove(this.getMovieKey(movie));
+    this.storage.remove(this.getMovieKey(movie.imdbID));
   }
  
-  isFavoriteMovie(movie: any) {
-    return this.storage.get(this.getMovieKey(movie));
+  isFavoriteMovie(idMovie: string) {
+    return this.storage.get(this.getMovieKey(idMovie));
   }
  
   toogleFavoriteMovie(movie: any) {
-    this.isFavoriteMovie(movie).then(
+    this.isFavoriteMovie(movie.imdbID).then(
       isFavorite =>
         isFavorite
           ? this.removeFavoriteMovie(movie)
@@ -29,8 +29,8 @@ export class FavorieMovieService {
     );
   }
  
-  getMovieKey(movie: any) {
-    return MOVIE_KEY + movie.imdbID;
+  getMovieKey(idMovie: string) {
+    return MOVIE_KEY + idMovie;
   }
  
   getFavoritesMovies(): Promise<any[]> {

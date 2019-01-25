@@ -4,11 +4,11 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
     </ion-buttons>
-    <ion-buttons end>
-        <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
-          <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
-        </button>
-      </ion-buttons>
+    <ion-buttons slot="secondary">
+      <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
+        <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
