@@ -62,7 +62,7 @@ export class DetailEpisodePage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value));
+    this.favoriteMovieService.isFavoriteMovie(this.detailEpisode.imdbID).then(value => (this.isFavorite = value));
   }
 
 }

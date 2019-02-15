@@ -20,7 +20,7 @@
     <ion-card *ngIf="favoriteMovies && favoriteMovies.length; else noFavorite">
       <ion-list>
         <ion-list-header class="my-movies-header">Favorite Movies</ion-list-header>
-        <ion-item *ngFor="let movie of favoriteMovies" (click)="getRouterLink(movie)">
+        <ion-item *ngFor="let movie of favoriteMovies" (click)="navigateToDetail(movie)">
           <ion-row>
             <ion-col col-1>
               <ion-icon name="star"></ion-icon>
