@@ -1,3 +1,4 @@
+import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
 
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,17 +15,18 @@ export class DetailSaisonPage implements OnInit {
   id: string;
   idSeason: string;
   detailSeason : any;
+  displayAlert: DisplayAlertUtils;
 
   async getDetailSeason() {
     await this.api.getSeasonById(this.id, this.idSeason)
     .subscribe(res => {
       this.detailSeason = res;
-    }, err => {
-      console.log(err);
-    });
+    }, err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
-  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController) { }
+  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController) {
+    this.displayAlert = new DisplayAlertUtils();
+   }
 
   backButtonClickEvent()
   {

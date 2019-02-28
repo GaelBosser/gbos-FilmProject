@@ -1,3 +1,4 @@
+import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
 import { Component, OnInit } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 
@@ -17,6 +18,7 @@ export class SeriePage implements OnInit {
   page: number = 1;
   type: string = "series";
   displaySearchBar: boolean = true;
+  displayAlert: DisplayAlertUtils;
 
   async getSerieSearchBar() {
     await this.api.getByTitle(this.searchSerie.trim(), this.type, this.page)
@@ -51,31 +53,27 @@ export class SeriePage implements OnInit {
         }
 
         this.lastSearchSerie = this.searchSerie;
-      }, err => {
-        console.log(err);
-      });
+      }, err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
-  searchbarEvent(event) {
+  searchbarEvent(event: any) {
     this.displaySearchBar = !this.displaySearchBar;
   }
 
-  doInfinite(infiniteScroll): Promise<any> {
-    //console.log('Begin async operation');
-
+  doInfinite(infiniteScroll: any): Promise<any> {
     return new Promise((resolve) => {
       setTimeout(() => {
         this.page++;
         this.getSerieSearchBar();
-
-        //console.log('Async operation has ended');
         resolve();
         infiniteScroll.target.complete();
       }, 500);
     })
   }
 
-  constructor(public api: OmdbServiceService) { }
+  constructor(public api: OmdbServiceService) {
+    this.displayAlert = new DisplayAlertUtils();
+   }
 
   ngOnInit() {}
 }

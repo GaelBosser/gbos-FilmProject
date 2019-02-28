@@ -1,10 +1,10 @@
-
+import { DisplayAlertUtils } from './../../utils/DisplayAlertUtils';
+import { ConvertorUtils } from './../../utils/ConvertorUtils';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Component, OnInit } from '@angular/core';
-import { NavController, Platform, AlertController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-favorie',
@@ -14,24 +14,24 @@ import { stringify } from '@angular/compiler/src/util';
 export class FavoriePage implements OnInit {
 
   favoriteMovies: any;
-  filePath: any;
-  fileName: any;
+  filePath: string;
+  fileName: string;
+  displayAlert: DisplayAlertUtils;
+  converteur: ConvertorUtils;
 
-  constructor(public favorieMovieService: FavorieMovieService, public navCtrl: NavController, 
-    private file: File, private platform: Platform, private alertController: AlertController,
-    private fileChooser: FileChooser) { }
+  constructor(private favorieMovieService: FavorieMovieService, private navCtrl: NavController, 
+    private file: File, private platform: Platform, private fileChooser: FileChooser) {
+      this.displayAlert = new DisplayAlertUtils();
+      this.converteur = new ConvertorUtils();
+    }
 
   ionViewWillEnter() {
     this.initFavoriteMovies();
   }
 
-    ionRefresh(event) {
-      //console.log('Pull Event Triggered!');
+    ionRefresh(event: any) {
       setTimeout(() => {
         this.initFavoriteMovies();
-        //console.log('Async operation has ended');
-
-        //complete()  signify that the refreshing has completed and to close the refresher
         event.target.complete();
       }, 2000);
   }
@@ -45,56 +45,72 @@ export class FavoriePage implements OnInit {
     }
   }
 
-  private initFavoriteMovies() {
+  initFavoriteMovies() {
     this.favorieMovieService.getFavoritesMovies().then(favs => { 
       this.favoriteMovies = favs;
-
-      if(this.platform.is('desktop'))
-      {
-        this.file.createDir("C:/", "TESSSST IONIC 4", true);
-        //this.download("sample.pdf","http://www.orimi.com/pdf-test.pdf");
-        console.log('platform desktop');
-      }
-    });
+    }).catch(e => this.displayAlert.presentAlert("Alerte", "", e));
   }
 
   async importFavorite() {
     if(this.platform.is('android'))
     {
-      this.fileChooser.open().then(uri => this.filePath = uri.toString()).catch(e => this.presentAlert("Alert", "", e));
-      this.file.resolveLocalFilesystemUrl(this.filePath).then(data => this.fileName = data);
-      this.filePath = this.filePath.replace(this.fileName, "");
-      alert(this.filePath + " : " + this.fileName);
-      this.file.readAsDataURL(this.filePath, this.fileName).then(favoris => this.favoriteMovies = favoris);
-      this.presentAlert("Favoris importé", "", JSON.stringify(this.favoriteMovies));
+      this.fileChooser.open().then(uri => {
+        this.filePath = uri.toString()
+        this.file.resolveLocalFilesystemUrl(this.filePath).then(data => {
+          this.fileName = data.name
+          this.filePath = this.filePath.replace(this.fileName, "");
+          this.file.readAsText(this.filePath, this.fileName).then(favoris => {
+            this.favoriteMovies = JSON.parse(favoris)
+            for (let i = 0; i < this.favoriteMovies.length; i++) {
+              this.favorieMovieService.addFavoriteMovie(this.favoriteMovies[i]);
+            }
+            this.displayAlert.presentAlert("Succès", "Favoris importé", "Tous les favoris du fichier " + 
+              this.fileName + " ont été importés");
+          }).catch(e => this.displayAlert.presentAlert("Erreur", "", "Un problème est survenu à la récupération des favoris"));
+        });
+      }).catch(e => this.displayAlert.presentAlert("Alerte", "", e));
     }
   }
 
-  exportFavorite() {
+  async exportFavorite() {
     if(this.platform.is('android'))
     {
       if(this.favoriteMovies.length == 0){
-        this.presentAlert("Alert", "", "Vous n'avez aucun favoris à exporter.");
+        await this.displayAlert.presentAlert("Alerte", "", "Vous n'avez aucun favoris à exporter.");
       }
       else{
-        this.file.writeFile(this.filePath, this.fileName, JSON.stringify(this.favoriteMovies), {replace: true});
-        this.presentAlert("Favoris exporté", "", "Chemin du fichier : " + this.filePath + "/" + this.fileName);
+        this.filePath = this.file.externalDataDirectory;
+        let dateFichier: Date = new Date();
+        this.fileName = "Favoris" + dateFichier.getFullYear() + dateFichier.getMonth() + dateFichier.getDay() + dateFichier.getHours() +
+          dateFichier.getMinutes() + dateFichier.getSeconds() + dateFichier.getMilliseconds() + ".json";
+        
+        this.file.writeFile(this.filePath, this.fileName, JSON.stringify(this.favoriteMovies), {replace: true}).then(success => 
+          this.displayAlert.presentAlert("Succès", "Favoris exporté", "Chemin du fichier : " + this.filePath + this.fileName))
+          .catch(e => this.displayAlert.presentAlert("Erreur", "", "Un problème est survenu durant l'export des favoris"));
       }
     }
   }
 
-  async presentAlert(headerAlert: string, subHeaderAlert: string, messageAlert: string) {
-      
-    const alert = await this.alertController.create({
-      header: headerAlert,
-      subHeader: subHeaderAlert,
-      message: messageAlert,
-      buttons: ['OK']
-    });
-    return await alert.present();
+  async exportCsvFavorite() {
+    if(this.platform.is('android'))
+    {
+      if(this.favoriteMovies.length == 0){
+        await this.displayAlert.presentAlert("Alerte", "", "Vous n'avez aucun favoris à exporter.");
+      }
+      else{
+        this.filePath = this.file.externalDataDirectory;
+        let dateFichier: Date = new Date();
+        this.fileName = "FavorisCSV" + dateFichier.getFullYear() + dateFichier.getMonth() + dateFichier.getDay() + dateFichier.getHours() +
+          dateFichier.getMinutes() + dateFichier.getSeconds() + dateFichier.getMilliseconds() + ".csv";
+
+        this.file.writeFile(this.filePath, this.fileName, this.converteur.JSONToCSVConvertor(this.favoriteMovies, true), 
+          {replace: true}).then(success => 
+          this.displayAlert.presentAlert("Succès", "Favoris exporté", "Chemin du fichier : " + this.filePath + this.fileName))
+          .catch(e => this.displayAlert.presentAlert("Erreur", "", "Un problème est survenu durant l'export csv des favoris"));
+      }
+    }
   }
 
   ngOnInit() {
-
   }
 }

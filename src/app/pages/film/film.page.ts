@@ -1,4 +1,4 @@
-
+import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
 import { Component, OnInit } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 
@@ -19,6 +19,7 @@ export class FilmPage implements OnInit {
   type: string = "movie";
   displaySearchBar: boolean = true;
   endInfiniteScroll: boolean;
+  displayAlert: DisplayAlertUtils;
 
   async getFilmSearchBar() {
     await this.api.getByTitle(this.searchFilm.trim(), this.type, this.page)
@@ -53,17 +54,14 @@ export class FilmPage implements OnInit {
         {
           this.searchFilmBool = true;
         }
-      }, err => {
-        console.log(err);
-      });
+      }, err => this.displayAlert.presentAlert("Alerte", "", err));
   }
 
-  searchbarEventClick(event) {
+  searchbarEventClick(event: any) {
     this.displaySearchBar = !this.displaySearchBar;
   }
 
-  doInfinite(infiniteScroll): Promise<any> {
-    //console.log('Begin async operation');
+  doInfinite(infiniteScroll: any): Promise<any> {
     return new Promise((resolve) => {
       setTimeout(() => {
         if(this.films.length < this.data.totalResults)
@@ -75,14 +73,15 @@ export class FilmPage implements OnInit {
         {
           this.endInfiniteScroll = true;
         }
-        //console.log('Async operation has ended');
         resolve();
         infiniteScroll.target.complete();
       }, 500);
     })
   }
 
-  constructor(public api: OmdbServiceService) { }
+  constructor(public api: OmdbServiceService) {
+    this.displayAlert = new DisplayAlertUtils();
+  }
 
   ngOnInit() {}
 }

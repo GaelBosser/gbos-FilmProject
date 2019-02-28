@@ -1,3 +1,4 @@
+import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
@@ -17,6 +18,7 @@ export class DetailsPage implements OnInit {
   id: string;
   seasonArray = [];
   isFavorite: boolean = false;
+  displayAlert: DisplayAlertUtils;
 
   async getDetailMovie() {
     await this.api.getDetailMovieById(this.id, this.plot)
@@ -29,9 +31,7 @@ export class DetailsPage implements OnInit {
           this.seasonArray.push(i);
         }
       }
-    }, err => {
-      console.log(err);
-    });
+    }, err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
   toggleFavorite(): void {
@@ -45,7 +45,9 @@ export class DetailsPage implements OnInit {
   }
 
   constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController, 
-    public favoriteMovieService: FavorieMovieService) { }
+    public favoriteMovieService: FavorieMovieService) {
+      this.displayAlert = new DisplayAlertUtils();
+     }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -56,6 +58,7 @@ export class DetailsPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value));
+    this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value))
+      .catch(err => this.displayAlert.presentAlert("Alert", "", err));
   }
 }
