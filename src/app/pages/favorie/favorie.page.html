@@ -1,6 +1,16 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Favoris</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-buttons slot="secondary">
+          <button ion-button incon-only style="font-size: 1.7em" (click)=importFavorite()>
+              <ion-icon name="cloud-upload"></ion-icon>
+            </button>
+        <button ion-button incon-only style="font-size: 1.7em" (click)=exportFavorite()>
+          <ion-icon name="cloud-download"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
