@@ -1,66 +1,49 @@
+import { Saison } from './../../models/serie/saison';
+import { Search } from './../../models/search/search';
+import { BaseDetailModel } from './../../models/baseDetailModel';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
-
-const apiUrl = "http://www.omdbapi.com/?apikey=75522b56";
+import { map } from 'rxjs/operators';
+import { Episode } from 'src/app/models/serie/episode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OmdbServiceService {
 
+  readonly apiUrl: string = "http://www.omdbapi.com/?apikey=75522b56";
+
   constructor(private http: HttpClient) { }
 
-  getByTitle(title: string, type: string, page: number): Observable<any> {
-    const url = `${apiUrl}&s=${title}&type=${type}&page=${page}`;
-    //console.log(url);
-    return this.http.get(url).pipe(
-      map(this.extractData),
-      catchError(this.handleError));
+  getByTitle(title: string, type: string, page: number): Observable<Search> {
+    const url = `${this.apiUrl}&s=${title}&type=${type}&page=${page}`;
+    return this.http.get(url).pipe(map((searchMovie: Search) => searchMovie));
   }
   
-  getDetailMovieById(id: string, plot: string): Observable<any> {
-    const url = `${apiUrl}&i=${id}&plot=${plot}`;
-    //console.log(url);
-    return this.http.get(url).pipe(
-      map(this.extractData),
-      catchError(this.handleError));
+  getDetailMovieById(id: string, plot: string): Observable<BaseDetailModel> {
+    const url = `${this.apiUrl}&i=${id}&plot=${plot}`;
+    return this.http.get(url).pipe(map((detailMovie: BaseDetailModel) => detailMovie));
   }
 
-  getSeasonById(id: string, idSeason: string): Observable<any> {
-    const url = `${apiUrl}&i=${id}&Season=${idSeason}`;
-    //console.log(url);
-    return this.http.get(url).pipe(
-      map(this.extractData),
-      catchError(this.handleError));
+  getSeasonById(id: string, idSeason: string): Observable<Saison> {
+    const url = `${this.apiUrl}&i=${id}&Season=${idSeason}`;
+    return this.http.get(url).pipe(map((detailSaison: Saison) => detailSaison));
   }
 
-  getEpisodeById(id: string, idSeason: string, idEpisode: string): Observable<any> {
-    const url = `${apiUrl}&i=${id}&Season=${idSeason}&Episode=${idEpisode}`;
-    //console.log(url);
-    return this.http.get(url).pipe(
-      map(this.extractData),
-      catchError(this.handleError));
+  getEpisodeById(id: string, idSeason: string, idEpisode: string): Observable<Episode> {
+    const url = `${this.apiUrl}&i=${id}&Season=${idSeason}&Episode=${idEpisode}`;
+    return this.http.get(url).pipe(map((detailEpisode: Episode) => detailEpisode));
   }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
     }
-    // return an observable with a user-facing error message
     return throwError('Something bad happened; please try again later.');
-  }
-  
-  private extractData(res: Response) {
-    let body = res;
-    return body || { };
   }
 }

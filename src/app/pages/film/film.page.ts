@@ -1,6 +1,7 @@
 import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
 import { Component, OnInit } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
+import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 
 @Component({
   selector: 'app-film',
@@ -16,13 +17,12 @@ export class FilmPage implements OnInit {
   data : any;
   films = [];
   page: number = 1;
-  type: string = "movie";
   displaySearchBar: boolean = true;
   endInfiniteScroll: boolean;
   displayAlert: DisplayAlertUtils;
 
   async getFilmSearchBar() {
-    await this.api.getByTitle(this.searchFilm.trim(), this.type, this.page)
+    await this.api.getByTitle(this.searchFilm.trim(), TypeMovie.Movie, this.page)
       .subscribe(res => {
         this.data = res;
         
