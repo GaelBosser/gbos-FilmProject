@@ -12,7 +12,7 @@ import { Episode } from 'src/app/models/serie/episode';
 })
 export class OmdbServiceService {
 
-  readonly apiUrl: string = "http://www.omdbapi.com/?apikey=75522b56";
+  private readonly apiUrl: string = "http://www.omdbapi.com/?apikey=75522b56";
 
   constructor(private http: HttpClient) { }
 

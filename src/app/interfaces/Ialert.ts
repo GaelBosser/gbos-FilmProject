@@ -1,4 +1,5 @@
-export interface IAlert {
+import { AlertButton } from "@ionic/core";
 
-    presentAlert(headerAlert: string, subHeaderAlert: string, messageAlert: string);
+export interface IAlert{
+    presentAlert(titleAlert: string, subTitleAlert: string, messageAlert: string, buttonsAlert: (string | AlertButton)[]): Promise<void>
 }

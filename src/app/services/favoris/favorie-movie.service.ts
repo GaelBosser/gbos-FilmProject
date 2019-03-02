@@ -8,7 +8,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FavorieMovieService {
 
-  readonly MOVIE_KEY: string = "movie_";
+  private readonly MOVIE_KEY: string = "movie_";
+  
+  constructor(private storage: Storage, private http: HttpClient) {
+  }
 
   addFavoriteMovie(movie: BaseImdbModel) {
     this.storage.set(this.getMovieKey(movie.imdbID), JSON.stringify(movie));
@@ -38,14 +41,9 @@ export class FavorieMovieService {
   getFavoritesMovies(): Promise<BaseImdbModel[]> {
     return new Promise(resolve => {
       let results: BaseImdbModel[] = [];
-      this.storage
-        .keys()
-        .then(keys => keys.filter(key => key.includes(this.MOVIE_KEY)).forEach(key => this.storage.get(key)
+      this.storage.keys().then(keys => keys.filter(key => key.includes(this.MOVIE_KEY)).forEach(key => this.storage.get(key)
           .then(data => results.push(JSON.parse(data)))));
       return resolve(results);
     });
-  }
-  
-  constructor(private storage: Storage, private http: HttpClient) {
   }
 }
