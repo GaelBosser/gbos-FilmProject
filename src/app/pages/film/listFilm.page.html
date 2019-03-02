@@ -7,14 +7,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher un film" [(ngModel)]="searchFilm" (ionChange)="getFilmSearchBar()"></ion-searchbar>
+<ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher un film" [(ngModel)]="searchText" (ionChange)="getSearchBar(typeMovie)"></ion-searchbar>
 
 <ion-content padding>
-  <ion-list *ngIf="searchFilmBool">
-      <div *ngIf="filmIntrouvable" style="color: black;">
-        <p>Aucun film n'a été trouvé pour la recherche suivante : <b>{{searchFilm}}</b></p>
+  <ion-list *ngIf="searchTextBool">
+      <div *ngIf="textIntrouvable" style="color: black;">
+        <p>Aucun film n'a été trouvé pour la recherche suivante : <b>{{searchText}}</b></p>
       </div>
-      <div *ngFor="let film of films">
+      <div *ngFor="let film of results">
         <ion-card routerLink="/detail/{{film.imdbID}}" >
           <ion-card-content padding>
             <div style="color:black;">
@@ -33,7 +33,7 @@
       </div>
   </ion-list>
 
-  <ion-infinite-scroll *ngIf="page <= 100 && !endInfiniteScroll, else elseBlockEndInfiniteScroll" (ionInfinite)="(doInfinite($event))">
+  <ion-infinite-scroll *ngIf="page <= 100 && !endInfiniteScroll, else elseBlockEndInfiniteScroll" (ionInfinite)="(doInfinite($event, typeMovie))">
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="Chargement des données en cours...">
@@ -41,7 +41,7 @@
   </ion-infinite-scroll>
 
   <ng-template #elseBlockEndInfiniteScroll>
-      <span>Aucune autre donnée à charger pour la recherche suivante : <b>{{searchFilm}}</b></span>
+      <span>Aucune autre donnée à charger pour la recherche suivante : <b>{{searchText}}</b></span>
   </ng-template>
 
 </ion-content>

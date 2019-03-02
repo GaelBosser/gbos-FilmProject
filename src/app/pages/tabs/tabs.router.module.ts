@@ -13,7 +13,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../film/film.module#FilmPageModule'
+            loadChildren: '../film/listFilm.module#ListFilmPageModule'
           }
         ]
       },
@@ -22,7 +22,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../serie/serie.module#SeriePageModule'
+            loadChildren: '../serie/listSerie.module#ListSeriePageModule'
           }
         ]
       },
