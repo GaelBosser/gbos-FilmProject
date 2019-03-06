@@ -1,43 +1,47 @@
-import { DisplayAlertUtils } from './../../utils/DisplayAlertUtils';
+import { BaseDetailModel } from './../../models/baseDetailModel';
+import { BasePage } from './../basePage';
 import { ConvertorUtils } from './../../utils/ConvertorUtils';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 
 @Component({
   selector: 'app-favorie',
   templateUrl: './favorie.page.html',
   styleUrls: ['./favorie.page.scss'],
 })
-export class FavoriePage implements OnInit {
+export class FavoriePage extends BasePage {
 
-  favoriteMovies: any;
+  favoriteMovies: Array<BaseDetailModel>;
   filePath: string;
   fileName: string;
-  displayAlert: DisplayAlertUtils;
   converteur: ConvertorUtils;
 
-  constructor(private favorieMovieService: FavorieMovieService, private navCtrl: NavController, 
-    private file: File, private platform: Platform, private fileChooser: FileChooser) {
-      this.displayAlert = new DisplayAlertUtils();
+  constructor(private favorieMovieService: FavorieMovieService, private navCtrl: NavController, private file: File,
+    private platform: Platform, private fileChooser: FileChooser) {
+      super()
       this.converteur = new ConvertorUtils();
+      this.favoriteMovies = new Array<BaseDetailModel>();
+      this.titlePage = "Liste de favoris";
     }
 
   ionViewWillEnter() {
     this.initFavoriteMovies();
+    console.log(this.favoriteMovies);
   }
 
-    ionRefresh(event: any) {
-      setTimeout(() => {
-        this.initFavoriteMovies();
-        event.target.complete();
-      }, 2000);
+  ionRefresh(event: any) {
+    setTimeout(() => {
+      this.initFavoriteMovies();
+      event.target.complete();
+    }, 2000);
   }
 
   navigateToDetail(movie: any){
-    if(movie.Type == "episode"){
+    if(movie.Type == TypeMovie.Episodes){
       this.navCtrl.navigateForward('/detail/' + movie.seriesID + '/season/' + movie.Season + '/episode/' + movie.Episode);
     }
     else{
@@ -112,5 +116,6 @@ export class FavoriePage implements OnInit {
   }
 
   ngOnInit() {
+    super.ngOnInit();
   }
 }

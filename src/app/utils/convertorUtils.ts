@@ -6,11 +6,11 @@ export class ConvertorUtils implements IConvertor {
 
     JSONToCSVConvertor(jsonData: any, showLabel: boolean) {
 
-        var arrData = typeof jsonData != 'object' ? JSON.parse(jsonData) : jsonData;
-        var CSV = '';    
+        let arrData: any = typeof jsonData != 'object' ? JSON.parse(jsonData) : jsonData;
+        let CSV: string = '';    
     
         if (showLabel) {
-            var row = "";
+            let row: string = "";
             for (var index in arrData[0]) {
                 row += index + ',';
             }
@@ -19,7 +19,7 @@ export class ConvertorUtils implements IConvertor {
         }
     
         for (var i = 0; i < arrData.length; i++) {
-            var row = "";
+            let row: string = "";
             for (var index in arrData[i]) {
                 row += '"' + arrData[i][index] + '",';
             }

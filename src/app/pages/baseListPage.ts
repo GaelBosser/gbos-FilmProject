@@ -25,14 +25,19 @@ export class BaseListPage extends BasePage{
         this.page = 1;
     }
 
+    ngOnInit(){
+        console.log('ngOnInit BaseListPage');
+        super.ngOnInit();
+    }
+
     async getSearchBar(typeMovie: TypeMovie) {
         await this.api.getByTitle(this.searchText.trim(), typeMovie, this.page)
-          .subscribe(res => {
+            .subscribe(res => {
             this.data = res;
             this.updateLastSearchedResult();
             this.responseSearchApi(res);
-          }, err => this.displayAlert.presentAlert(AlertType.Alert, "", err));
-      }
+            }, err => this.displayAlert.presentAlert(AlertType.Alert, "", err));
+    }
     
     responseSearchApi(res: Search): void{
         if(res.Response == ResponseAPI.False){
@@ -62,18 +67,18 @@ export class BaseListPage extends BasePage{
     searchbarEventClick(event: EventSource) {
         this.displaySearchBar = !this.displaySearchBar;
     }
-    
-    doInfinite(infiniteScroll: any, typeMovie: TypeMovie): Promise<any> {
+
+    doInfinite(infiniteScroll: any, typeMovie: TypeMovie): Promise<any>{
         return new Promise((resolve) => { 
             setTimeout(() => {
-            if(this.results.length < parseInt(this.data.totalResults)){
-                this.page++;
-                this.getSearchBar(typeMovie);
-            }
-            else
-                this.endInfiniteScroll = true;
-            resolve();
-            infiniteScroll.target.complete();
+                if(this.results.length < parseInt(this.data.totalResults)){
+                    this.page++;
+                    this.getSearchBar(typeMovie);
+                }
+                else
+                    this.endInfiniteScroll = true;
+                resolve();
+                infiniteScroll.target.complete();
             }, 500);
         })
     }

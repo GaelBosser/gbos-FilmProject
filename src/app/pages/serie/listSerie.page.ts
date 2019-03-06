@@ -1,6 +1,5 @@
-import { Serie } from './../../models/serie/serie';
 import { BaseListPage } from './../baseListPage';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 
@@ -9,7 +8,7 @@ import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
   templateUrl: './listSerie.page.html',
   styleUrls: ['./listSerie.page.scss'],
 })
-export class ListSeriePage extends BaseListPage implements OnInit {
+export class ListSeriePage extends BaseListPage {
 
   typeMovie: TypeMovie;
 
@@ -20,5 +19,7 @@ export class ListSeriePage extends BaseListPage implements OnInit {
   }
 
   ngOnInit(){
+    console.log('ngOnInit ListSeriePage');
+    super.ngOnInit();
   }
 }

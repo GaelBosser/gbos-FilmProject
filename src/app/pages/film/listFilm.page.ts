@@ -1,5 +1,5 @@
 import { BaseListPage } from './../baseListPage';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 
@@ -8,7 +8,7 @@ import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
   templateUrl: './listFilm.page.html',
   styleUrls: ['./listFilm.page.scss'],
 })
-export class ListFilmPage extends BaseListPage implements OnInit {
+export class ListFilmPage extends BaseListPage {
 
   typeMovie: TypeMovie;
 
@@ -18,6 +18,8 @@ export class ListFilmPage extends BaseListPage implements OnInit {
     this.titlePage = "Liste de films";
   }
 
-  ngOnInit() {
+  ngOnInit(){
+    console.log('ngOnInit ListFilmPage');
+    super.ngOnInit();
   }
 }

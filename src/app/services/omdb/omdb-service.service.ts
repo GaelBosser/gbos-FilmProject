@@ -1,3 +1,4 @@
+import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 import { Saison } from './../../models/serie/saison';
 import { Search } from './../../models/search/search';
 import { BaseDetailModel } from './../../models/baseDetailModel';
@@ -16,7 +17,7 @@ export class OmdbServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getByTitle(title: string, type: string, page: number): Observable<Search> {
+  getByTitle(title: string, type: TypeMovie, page: number): Observable<Search> {
     const url = `${this.apiUrl}&s=${title}&type=${type}&page=${page}`;
     return this.http.get(url).pipe(map((searchMovie: Search) => searchMovie));
   }
