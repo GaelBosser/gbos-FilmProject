@@ -2,63 +2,40 @@
   <ion-toolbar>
     <ion-title>{{ titlePage }}</ion-title>
     <ion-buttons slot="secondary">
-      <ion-buttons slot="secondary">
-          <button ion-button incon-only style="font-size: 1.7em" (click)=importFavorite()>
-              <ion-icon name="cloud-upload"></ion-icon>
-            </button>
-        <button ion-button incon-only style="font-size: 1.7em" (click)=exportFavorite()>
-          <ion-icon name="cloud-download"></ion-icon>
-        </button>
-        <button ion-button incon-only style="font-size: 1.7em" (click)=exportCsvFavorite()>
-          <ion-icon name="download"></ion-icon>
-        </button>
-      </ion-buttons>
+      <button ion-button incon-only style="font-size: 1.7em" (click)="presentActionSheetExport()">
+        <ion-icon name="cloud-download"></ion-icon>
+      </button>
+      <button ion-button incon-only style="font-size: 1.7em" (click)=presentActionSheetImport()>
+        <ion-icon name="cloud-upload"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="ionRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
 
-    <ion-refresher slot="fixed" 
-      (ionRefresh)="ionRefresh($event)">
-        <ion-refresher-content
-          pullingIcon="arrow-dropdown"
-          pullingText="Pull to refresh"
-          refreshingSpinner="circles"
-          refreshingText="Refreshing...">
-        </ion-refresher-content>
-    </ion-refresher>
- 
-    <ion-card *ngIf="favoriteMovies && favoriteMovies.length; else noFavorite">
-      <ion-list>
-        <ion-list-header class="my-movies-header">Favorite Movies</ion-list-header>
-        <ion-item *ngFor="let movie of favoriteMovies" (click)="navigateToDetail(movie)">
-          <ion-row>
-            <ion-col col-1>
-              <ion-icon name="star"></ion-icon>
-              <img src={{movie.Poster}} alt={{movie.Title}} class="imgPosterResize">
-            </ion-col>
-            <ion-col col-6 text-wrap>
-              <h4>{{movie.Title}}</h4>
-            </ion-col>
-            <ion-col col-3>
-              <h4>{{movie.Type}}</h4>
-            </ion-col>
-            <ion-col col-2>
-              <ion-badge color="primary">{{movie.Awards}}</ion-badge>
-            </ion-col>
-          </ion-row>
-        </ion-item>
-      </ion-list>
+  <ion-list *ngIf="favoriteMovies && favoriteMovies.length; else noFavorite">
+    <ion-card *ngFor="let movie of favoriteMovies" (click)="navigateToDetail(movie)">
+      <ion-item>
+        <ion-row>
+          <ion-col col-6 text-wrap>
+            <h4>{{movie.Title}}</h4>
+          </ion-col>
+        </ion-row>
+      </ion-item>
     </ion-card>
- 
-    <ng-template #noFavorite>
-      <ion-card>
-        <ion-card-content>
-          <p>Vous avez aucun favoris.</p>
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
- 
-  </ion-content>
+  </ion-list>
+
+  <ng-template #noFavorite>
+    <ion-card>
+      <ion-card-content>
+        <p>Vous avez aucun favoris.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

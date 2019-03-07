@@ -1,7 +1,7 @@
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 import { Saison } from './../../models/serie/saison';
 import { Search } from './../../models/search/search';
-import { BaseDetailModel } from './../../models/baseDetailModel';
+import { BaseDetailModel, Plot } from './../../models/baseDetailModel';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -19,10 +19,10 @@ export class OmdbServiceService {
 
   getByTitle(title: string, type: TypeMovie, page: number): Observable<Search> {
     const url = `${this.apiUrl}&s=${title}&type=${type}&page=${page}`;
-    return this.http.get(url).pipe(map((searchMovie: Search) => searchMovie));
+    return this.http.get(url).pipe(map((detailSearch: Search) => detailSearch));
   }
   
-  getDetailMovieById(id: string, plot: string): Observable<BaseDetailModel> {
+  getDetailMovieById(id: string, plot: Plot): Observable<BaseDetailModel> {
     const url = `${this.apiUrl}&i=${id}&plot=${plot}`;
     return this.http.get(url).pipe(map((detailMovie: BaseDetailModel) => detailMovie));
   }

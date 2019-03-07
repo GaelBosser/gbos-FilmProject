@@ -1,47 +1,61 @@
-import { DisplayAlertUtils } from './../../utils/displayAlertUtils';
+import { Saison } from './../../models/serie/saison';
+import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
+import { Episode } from 'src/app/models/serie/episode';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-detail-episode',
   templateUrl: './detail-episode.page.html',
   styleUrls: ['./detail-episode.page.scss'],
 })
-export class DetailEpisodePage implements OnInit {
+export class DetailEpisodePage extends BaseDetailPage {
 
-  id: string;
   idSeason: string;
   idEpisode: string;
-  detailEpisode : any;
-  detailSeason: any;
-  isFavorite: boolean = false;
-  displayAlert: DisplayAlertUtils;
+  detailEpisode: Episode;
+  detailSeason: Saison;
+  isFavorite: boolean;
+
+  constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
+    private favoriteMovieService: FavorieMovieService) {
+    super(api, route, navCtrl)
+    this.isFavorite = false;
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.idSeason = this.route.snapshot.paramMap.get('idSeason');
+    this.idEpisode = this.route.snapshot.paramMap.get('idEpisode');
+  }
+
+  ionViewWillEnter() {
+    this.getDetailSeason();
+    this.getDetailEpisode();
+  }
+
+  ionViewDidEnter() {
+    this.favoriteMovieService.isFavoriteMovie(this.detailEpisode.imdbID).then(value => (this.isFavorite = value))
+      .catch(err => this.displayAlert.presentAlert("Alert", "", err));
+  }
 
   async getDetailSeason() {
     await this.api.getSeasonById(this.id, this.idSeason)
-    .subscribe(res => {
-      this.detailSeason = res;
-    }, err => this.displayAlert.presentAlert("Alert", "", err));
+      .subscribe(res => {
+        this.detailSeason = res;
+      }, err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
   async getDetailEpisode() {
     await this.api.getEpisodeById(this.id, this.idSeason, this.idEpisode)
-    .subscribe(res => {
-      this.detailEpisode = res;
-    }, err => this.displayAlert.presentAlert("Alert", "", err));
-  }
-
-  constructor(public api: OmdbServiceService, private route: ActivatedRoute, public navCtrl: NavController,
-    public favoriteMovieService: FavorieMovieService) {
-      this.displayAlert = new DisplayAlertUtils();
-     }
-
-  backButtonClickEvent()
-  {
-    this.navCtrl.goBack();
+      .subscribe(res => {
+        this.detailEpisode = res;
+        this.setTitlePage();
+      }, err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
   toggleFavorite(): void {
@@ -49,21 +63,7 @@ export class DetailEpisodePage implements OnInit {
     this.favoriteMovieService.toogleFavoriteMovie(this.detailEpisode);
   }
 
-  ngOnInit()
-  {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.idSeason = this.route.snapshot.paramMap.get('idSeason');
-    this.idEpisode = this.route.snapshot.paramMap.get('idEpisode');
+  setTitlePage() {
+    this.titlePage = `Détail série ${this.detailSeason.Title} Saison ${this.detailSeason.Season} Épisode ${this.detailEpisode.Episode}`;
   }
-
-  ionViewWillEnter(){
-    this.getDetailSeason();
-    this.getDetailEpisode();
-  }
-
-  ionViewDidEnter(){
-    this.favoriteMovieService.isFavoriteMovie(this.detailEpisode.imdbID).then(value => (this.isFavorite = value))
-      .catch(err => this.displayAlert.presentAlert("Alert", "", err));
-  }
-
 }

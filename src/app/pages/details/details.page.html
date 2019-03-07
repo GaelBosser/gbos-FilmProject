@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Fiche détails</ion-title>
+    <ion-title>{{titlePage}}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
+      <ion-back-button (click)="backButtonClickEvent()"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="secondary">
       <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
@@ -32,15 +32,15 @@
           <p>Site web : {{detailsMovie.Website}}</p>
         </div>
         <div *ngIf="detailsMovie.Type == 'series'">
-            <span *ngFor="let season of seasonArray;">
-              <p routerLink="/detail/{{detailsMovie.imdbID}}/season/{{season}}">Saison {{season}}</p>
-            </span>
+          <span *ngFor="let season of numberSeasonArray;">
+            <p routerLink="/detail/{{detailsMovie.imdbID}}/season/{{season}}">Saison {{season}}</p>
+          </span>
         </div>
         <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
           <p>Aucun poster associé à ce film</p>
         </div>
         <ng-template #elseBlockPosterImg>
-            <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
+          <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
         </ng-template>
       </ion-card-content>
     </ion-card>

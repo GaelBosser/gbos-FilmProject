@@ -12,14 +12,13 @@ export class ListFilmPage extends BaseListPage {
 
   typeMovie: TypeMovie;
 
-  constructor(protected api: OmdbServiceService ) {
+  constructor(protected api: OmdbServiceService) {
     super(api)
     this.typeMovie = TypeMovie.Movie;
     this.titlePage = "Liste de films";
   }
 
-  ngOnInit(){
-    console.log('ngOnInit ListFilmPage');
+  ngOnInit() {
     super.ngOnInit();
   }
 }

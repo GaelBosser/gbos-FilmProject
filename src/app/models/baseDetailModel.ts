@@ -1,6 +1,11 @@
 import { BaseImdbModel } from './baseImdbModel';
 import { Rating } from './rating/rating';
 
+export enum Plot{
+    Short = "short",
+    Full = "full",
+}
+
 export class BaseDetailModel extends BaseImdbModel{
     Rated:      string;
     Released:   string;
@@ -9,7 +14,7 @@ export class BaseDetailModel extends BaseImdbModel{
     Director:   string;
     Writer:     string;
     Actors:     string;
-    Plot:       string;
+    Plot:       Plot;
     Language:   string;
     Country:    string;
     Awards:     string;

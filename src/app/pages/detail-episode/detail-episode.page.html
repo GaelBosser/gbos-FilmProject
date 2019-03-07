@@ -1,21 +1,17 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-title>
-        <div *ngIf="detailEpisode">
-            Détail série {{detailSeason.Title}} Saison {{detailEpisode.Season}} Épisode {{detailEpisode.Episode}}
-        </div>
-      </ion-title>
-      <ion-buttons slot="start">
-        <ion-back-button (click)="backButtonClickEvent()" ></ion-back-button>
-      </ion-buttons>
-      <ion-buttons slot="secondary">
-        <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
-          <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
-        </button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  
+  <ion-toolbar>
+    <ion-title>{{ titlePage }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="backButtonClickEvent()"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="secondary">
+      <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
+        <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content padding>
   <ion-list>
     <ion-card>
@@ -31,4 +27,3 @@
     </ion-card>
   </ion-list>
 </ion-content>
-  

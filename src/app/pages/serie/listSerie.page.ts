@@ -18,8 +18,7 @@ export class ListSeriePage extends BaseListPage {
     this.titlePage = "Liste de séries";
   }
 
-  ngOnInit(){
-    console.log('ngOnInit ListSeriePage');
+  ngOnInit() {
     super.ngOnInit();
   }
 }
