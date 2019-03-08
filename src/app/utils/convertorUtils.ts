@@ -45,8 +45,6 @@ export class ConvertorUtils implements IConvertor {
         let str: string = json.replace(/},/g, "},\r\n");
         return str;
     }
-    // A FAIRE
-    // RAJOUTER LE TYPE MOVIE DANS L'EXPORT JSON ET CSV POUR QU'ON SOIT REDIRIGÉ VERS LA BONNE ROUTE LORSQU'ON APPUIS SUR UN FAVORIS
 
     CSVToArray(strData: string, strDelimiter: string) {
         strDelimiter = (strDelimiter || ",");

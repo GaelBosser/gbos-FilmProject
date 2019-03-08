@@ -5,7 +5,7 @@ import { BasePage } from './../basePage';
 import { ConvertorUtils } from './../../utils/ConvertorUtils';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Component } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController, Platform, IonDatetime } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
@@ -46,13 +46,8 @@ export class FavoriePage extends BasePage {
     }, 2000);
   }
 
-  navigateToDetail(movie: any) {
-    if (movie.Type == TypeMovie.Episodes) {
-      this.navCtrl.navigateForward('/detail/' + movie.seriesID + '/season/' + movie.Season + '/episode/' + movie.Episode);
-    }
-    else {
-      this.navCtrl.navigateForward('/detail/' + movie.imdbID);
-    }
+  navigateToDetail(idMovie: string) {
+    this.navCtrl.navigateForward('/detail/' + idMovie);
   }
 
   initFavoriteMovies() {
@@ -67,14 +62,14 @@ export class FavoriePage extends BasePage {
       role: 'exportJson',
       icon: 'document',
       handler: () => {
-        this.exportJSONFavorite();
+        this.exportFavoris('JSON');
       }
     },
     {
       text: 'CSV',
       icon: 'bookmarks',
       handler: () => {
-        this.exportCSVFavorite();
+        this.exportFavoris('CSV');
       }
     }]);
   }
@@ -85,7 +80,7 @@ export class FavoriePage extends BasePage {
       role: 'importJson',
       icon: 'document',
       handler: () => {
-        this.importJSONFavorite();
+        this.importFavoris('JSON');
       }
     },
     {
@@ -93,12 +88,12 @@ export class FavoriePage extends BasePage {
       role: 'importCSV',
       icon: 'bookmarks',
       handler: () => {
-        this.importCSVFavorite();
+        this.importFavoris('CSV');
       }
     }]);
   }
 
-  async importJSONFavorite() {
+  async importFavoris(typeImport: string) {
     if (this.platform.is('android')) {
       this.fileChooser.open().then(uri => {
         this.filePath = uri.toString()
@@ -106,7 +101,12 @@ export class FavoriePage extends BasePage {
           this.fileName = data.name
           this.filePath = this.filePath.replace(this.fileName, "");
           this.file.readAsText(this.filePath, this.fileName).then(favoris => {
-            this.favoriteMovies = JSON.parse(favoris)
+
+            if (typeImport.toUpperCase().trim() == 'JSON')
+              this.favoriteMovies = JSON.parse(favoris)
+            else if (typeImport.toUpperCase().trim() == 'CSV')
+              this.favoriteMovies = JSON.parse(this.converteur.CSVToJsonConvertor(favoris));
+
             for (let i = 0; i < this.favoriteMovies.length; i++) {
               this.favorieMovieService.addFavoriteMovie(this.favoriteMovies[i]);
             }
@@ -118,69 +118,34 @@ export class FavoriePage extends BasePage {
     }
   }
 
-  async importCSVFavorite() {
-    if (this.platform.is('android')) {
-      this.fileChooser.open().then(uri => {
-        this.filePath = uri.toString()
-        this.file.resolveLocalFilesystemUrl(this.filePath).then(data => {
-          this.fileName = data.name;
-          this.filePath = this.filePath.replace(this.fileName, "");
-          this.file.readAsText(this.filePath, this.fileName).then(favsToImport => {
-            this.favoriteMovies = JSON.parse(this.converteur.CSVToJsonConvertor(favsToImport));
-            for (let i = 0; i < this.favoriteMovies.length; i++) {
-              this.favorieMovieService.addFavoriteMovie(this.favoriteMovies[i]);
-            }
-            this.displayAlert.presentAlert(AlertType.Succes, "Favoris importé", "Tous les favoris du fichier " +
-              this.fileName + " ont été importés");
-          })
-        }).catch(e => this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenu lors de la lecture du fichier CSV"));
-      }).catch(e => this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenu lors de l'import des favoris en CSV"));;
-    }
-  }
-
-  async exportJSONFavorite() {
+  async exportFavoris(typeExport: string) {
     if (this.platform.is('android')) {
       if (this.favoriteMovies.length == 0) {
         await this.displayAlert.presentAlert(AlertType.Alert, "", "Vous n'avez aucun favoris à exporter.");
       }
       else {
         this.filePath = this.file.externalDataDirectory;
-        let dateFichier: Date = new Date();
-        this.fileName = "Favoris" + dateFichier.getFullYear() + dateFichier.getMonth() + dateFichier.getDay() + dateFichier.getHours() +
-          dateFichier.getMinutes() + dateFichier.getSeconds() + dateFichier.getMilliseconds() + ".json";
+        let dateMillisecondes: number = new Date().getTime();
+        this.fileName = "Favoris" + dateMillisecondes + "." + typeExport.toLowerCase().trim();
 
-        let favorisToExportJson: Array<BaseImdbModel> = this.favoriteMovies.map(filtre => <BaseImdbModel>{
+        let favorisToExport: Array<BaseImdbModel> = this.favoriteMovies.map(filtre => <BaseImdbModel>{
           imdbID: filtre.imdbID,
-          Title: filtre.Title
+          Title: filtre.Title,
+          Type: filtre.Type
         });
 
-        this.file.writeFile(this.filePath, this.fileName, JSON.stringify(favorisToExportJson), { replace: true }).then(success =>
+        console.log(favorisToExport);
+
+        let strToExport: string;
+        if (typeExport.toUpperCase().trim() == 'JSON')
+          strToExport = JSON.stringify(favorisToExport);
+        else if (typeExport.toUpperCase().trim() == 'CSV')
+          strToExport = this.converteur.JSONToCSVConvertor(favorisToExport, true);
+
+        console.log(strToExport);
+        this.file.writeFile(this.filePath, this.fileName, strToExport, { replace: true }).then(success =>
           this.displayAlert.presentAlert(AlertType.Succes, "Favoris exporté", "Chemin du fichier : " + this.filePath + this.fileName))
           .catch(e => this.displayAlert.presentAlert(AlertType.Erreur, "", "Un problème est survenu durant l'export JSON des favoris"));
-      }
-    }
-  }
-
-  async exportCSVFavorite() {
-    if (this.platform.is('android')) {
-      if (this.favoriteMovies.length == 0) {
-        await this.displayAlert.presentAlert(AlertType.Alert, "", "Vous n'avez aucun favoris à exporter.");
-      }
-      else {
-        this.filePath = this.file.externalDataDirectory;
-        let dateFichier: Date = new Date();
-        this.fileName = "FavorisCSV" + dateFichier.getFullYear() + dateFichier.getMonth() + dateFichier.getDay() + dateFichier.getHours() +
-          dateFichier.getMinutes() + dateFichier.getSeconds() + dateFichier.getMilliseconds() + ".csv";
-
-        let favorisToExportCsv: Array<BaseImdbModel> = this.favoriteMovies.map(filtre => <BaseImdbModel>{
-          imdbID: filtre.imdbID,
-          Title: filtre.Title
-        });
-
-        this.file.writeFile(this.filePath, this.fileName, this.converteur.JSONToCSVConvertor(favorisToExportCsv, true),
-          { replace: true }).then(success =>
-            this.displayAlert.presentAlert(AlertType.Succes, "Favoris exporté", "Chemin du fichier : " + this.filePath + this.fileName))
-          .catch(e => this.displayAlert.presentAlert(AlertType.Erreur, "", "Un problème est survenu durant l'export CSV des favoris"));
       }
     }
   }

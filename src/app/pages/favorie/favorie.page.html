@@ -20,7 +20,7 @@
   </ion-refresher>
 
   <ion-list *ngIf="favoriteMovies && favoriteMovies.length; else noFavorite">
-    <ion-card *ngFor="let movie of favoriteMovies" (click)="navigateToDetail(movie)">
+    <ion-card *ngFor="let movie of favoriteMovies" (click)="navigateToDetail(movie.imdbID)">
       <ion-item>
         <ion-row>
           <ion-col col-6 text-wrap>
