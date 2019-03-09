@@ -3,8 +3,7 @@ import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
-import { isUndefined } from 'util';
+import { NavController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-detail-saison',
@@ -16,8 +15,9 @@ export class DetailSaisonPage extends BaseDetailPage {
   idSeason: string;
   detailSeason: Saison;
 
-  constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController) {
-    super(api, route, navCtrl)
+  constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
+    protected loadingController: LoadingController) {
+    super(api, route, navCtrl, loadingController)
   }
 
   ngOnInit() {
@@ -27,11 +27,13 @@ export class DetailSaisonPage extends BaseDetailPage {
   }
 
   async getDetailSeason() {
+    await this.presentLoading();
     await this.api.getSeasonById(this.id, this.idSeason)
       .subscribe(res => {
         this.detailSeason = res;
         this.setTitlePage();
       }, err => this.displayAlert.presentAlert("Alert", "", err));
+    await this.dismissLoading();
   }
 
   setTitlePage() {

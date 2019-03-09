@@ -1,3 +1,4 @@
+import { LoadingController } from '@ionic/angular';
 import { BaseListPage } from './../baseListPage';
 import { Component } from '@angular/core';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
@@ -12,8 +13,8 @@ export class ListSeriePage extends BaseListPage {
 
   typeMovie: TypeMovie;
 
-  constructor(protected api: OmdbServiceService) {
-    super(api)
+  constructor(protected api: OmdbServiceService, protected loadingController: LoadingController) {
+    super(api, loadingController)
     this.typeMovie = TypeMovie.Series;
     this.titlePage = "Liste de séries";
   }

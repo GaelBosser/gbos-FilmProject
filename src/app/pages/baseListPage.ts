@@ -1,3 +1,4 @@
+import { LoadingController } from '@ionic/angular';
 import { AlertType } from './../utils/displayAlertUtils';
 import { TypeMovie } from './../models/typeMovie/typeMovie';
 import { BaseImdbModel } from './../models/baseImdbModel';
@@ -18,8 +19,8 @@ export class BaseListPage extends BasePage {
     protected displaySearchBar: boolean;
     protected endInfiniteScroll: boolean;
 
-    constructor(protected api: OmdbServiceService) {
-        super()
+    constructor(protected api: OmdbServiceService, protected loadingController: LoadingController) {
+        super(loadingController)
         this.results = new Array<BaseImdbModel>();
         this.displaySearchBar = true;
         this.page = 1;
@@ -30,6 +31,7 @@ export class BaseListPage extends BasePage {
     }
 
     async getSearchBar(typeMovie: TypeMovie) {
+        await this.presentLoading();
         await this.api.getByTitle(this.searchText.trim(), typeMovie, this.page)
             .subscribe(res => {
                 this.data = res;
@@ -37,6 +39,7 @@ export class BaseListPage extends BasePage {
                 this.responseSearchApi(res);
             },
             err => this.displayAlert.presentAlert(AlertType.Alert, "", "Une erreur est survenue durant l'appel au serveur."));
+        await this.dismissLoading();
     }
 
     responseSearchApi(res: Search): void {

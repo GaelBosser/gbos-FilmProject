@@ -3,7 +3,7 @@ import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Episode } from 'src/app/models/serie/episode';
 import { isUndefined } from 'util';
@@ -22,8 +22,8 @@ export class DetailEpisodePage extends BaseDetailPage {
   isFavorite: boolean;
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
-    private favoriteMovieService: FavorieMovieService) {
-    super(api, route, navCtrl)
+    private favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController) {
+    super(api, route, navCtrl, loadingController)
     this.isFavorite = false;
   }
 
@@ -44,18 +44,22 @@ export class DetailEpisodePage extends BaseDetailPage {
   }
 
   async getDetailSeason() {
+    await this.presentLoading();
     await this.api.getSeasonById(this.id, this.idSeason)
       .subscribe(res => {
         this.detailSeason = res;
       }, err => this.displayAlert.presentAlert("Alert", "", err));
+    await this.dismissLoading();
   }
 
   async getDetailEpisode() {
+    await this.presentLoading();
     await this.api.getEpisodeById(this.id, this.idSeason, this.idEpisode)
       .subscribe(res => {
         this.detailEpisode = res;
         this.setTitlePage();
       }, err => this.displayAlert.presentAlert("Alert", "", err));
+    await this.dismissLoading();
   }
 
   toggleFavorite(): void {

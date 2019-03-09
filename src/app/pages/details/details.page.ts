@@ -4,7 +4,7 @@ import { FavorieMovieService } from './../../services/favoris/favorie-movie.serv
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-details',
@@ -17,39 +17,41 @@ export class DetailsPage extends BaseDetailPage {
   plot: Plot;
   numberSeasonArray: Array<number>;
   isFavorite: boolean;
-  
-  constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController, 
-    protected favoriteMovieService: FavorieMovieService) {
-      super(api, route, navCtrl)
-      this.plot = Plot.Full;
-      this.numberSeasonArray = new Array<number>();
-      this.isFavorite = false;
-      this.titlePage = "Fiche détails";
-    }
+
+  constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
+    protected favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController) {
+    super(api, route, navCtrl, loadingController)
+    this.plot = Plot.Full;
+    this.numberSeasonArray = new Array<number>();
+    this.isFavorite = false;
+    this.titlePage = "Fiche détails";
+  }
 
   ngOnInit() {
     super.ngOnInit();
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.getDetailMovie();
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.favoriteMovieService.isFavoriteMovie(this.id).then(value => (this.isFavorite = value))
       .catch(err => this.displayAlert.presentAlert("Alert", "", err));
   }
 
   async getDetailMovie() {
+    await this.presentLoading();
     await this.api.getDetailMovieById(this.id, this.plot)
-    .subscribe(res => {
-      this.detailsMovie = res;
-      if(this.detailsMovie.Type == "series" && this.numberSeasonArray.length == 0){
-        for(let i = 1; i <= parseInt(this.detailsMovie.totalSeasons); i++){
-          this.numberSeasonArray.push(i);
+      .subscribe(res => {
+        this.detailsMovie = res;
+        if (this.detailsMovie.Type == "series" && this.numberSeasonArray.length == 0) {
+          for (let i = 1; i <= parseInt(this.detailsMovie.totalSeasons); i++) {
+            this.numberSeasonArray.push(i);
+          }
         }
-      }
-    }, err => this.displayAlert.presentAlert("Alert", "", err));
+      }, err => this.displayAlert.presentAlert("Alert", "", err));
+    await this.dismissLoading();
   }
 
   toggleFavorite(): void {
