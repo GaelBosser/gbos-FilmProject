@@ -1,3 +1,4 @@
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Saison } from './../../models/serie/saison';
 import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
@@ -6,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, LoadingController } from '@ionic/angular';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Episode } from 'src/app/models/serie/episode';
-import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-detail-episode',
@@ -22,8 +22,9 @@ export class DetailEpisodePage extends BaseDetailPage {
   isFavorite: boolean;
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
-    private favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController) {
-    super(api, route, navCtrl, loadingController)
+    private favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
+    protected socialSharing: SocialSharing) {
+    super(api, route, navCtrl, loadingController, socialSharing)
     this.isFavorite = false;
   }
 
@@ -69,5 +70,14 @@ export class DetailEpisodePage extends BaseDetailPage {
 
   setTitlePage() {
     this.titlePage = `Détail série ${this.detailSeason.Title} Saison ${this.detailSeason.Season} Épisode ${this.detailEpisode.Episode}`;
+  }
+
+  shareEpisodeEvent() {
+    let message: string = "Regarde cette pépite, ça vaut le coup d'être regardé : " +
+      `${this.detailSeason.Title} Saison ${this.detailSeason.Season} Épisode ${this.detailEpisode.Episode} : ${this.detailEpisode.Title}`;
+    let subject: string = null;
+    let file: string | string[] = null;
+    let url: string = null;
+    this.shareMovie(message, subject, file, url);
   }
 }

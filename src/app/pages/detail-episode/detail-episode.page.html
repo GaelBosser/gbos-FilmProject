@@ -8,6 +8,9 @@
       <button ion-button incon-only style="font-size: 1.7em" (click)=toggleFavorite()>
         <ion-icon [name]="isFavorite ? 'star':'star-outline'"></ion-icon>
       </button>
+      <button ion-button incon-only style="font-size: 1.7em" (click)="shareEpisodeEvent()">
+        <ion-icon name="share"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
