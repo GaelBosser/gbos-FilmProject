@@ -20,6 +20,7 @@ export class DetailsPage extends BaseDetailPage {
   plot: Plot;
   numberSeasonArray: Array<number>;
   isFavorite: boolean;
+  listActeurs: Array<string>;
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
     protected favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
@@ -29,6 +30,7 @@ export class DetailsPage extends BaseDetailPage {
     this.numberSeasonArray = new Array<number>();
     this.isFavorite = false;
     this.titlePage = "Fiche détails";
+    this.listActeurs = new Array<string>();
   }
 
   ngOnInit() {
@@ -49,13 +51,23 @@ export class DetailsPage extends BaseDetailPage {
     await this.api.getDetailMovieById(this.id, this.plot)
       .subscribe(res => {
         this.detailsMovie = res;
-        if (this.detailsMovie.Type == "series" && this.numberSeasonArray.length == 0) {
-          for (let i = 1; i <= parseInt(this.detailsMovie.totalSeasons); i++) {
-            this.numberSeasonArray.push(i);
-          }
-        }
+        this.setSeasonArray();
+        this.setActorsArray();
       }, err => this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenue durant l'appel au serveur"));
     await this.dismissLoading();
+  }
+
+  private setSeasonArray(): void {
+    if (this.detailsMovie.Type == TypeMovie.Series && this.numberSeasonArray.length == 0) {
+      for (let i = 1; i <= parseInt(this.detailsMovie.totalSeasons); i++) {
+        this.numberSeasonArray.push(i);
+      }
+    }
+  }
+
+  private setActorsArray(): void {
+    let detailsMovieModel: BaseDetailModel = this.detailsMovie;
+    this.listActeurs = detailsMovieModel.Actors.split(", ", detailsMovieModel.Actors.split(",").length);
   }
 
   toggleFavorite(): void {
@@ -63,7 +75,7 @@ export class DetailsPage extends BaseDetailPage {
     this.favoriteMovieService.toogleFavoriteMovie(this.detailsMovie);
   }
 
-  shareMovieEvent(){
+  shareMovieEvent() {
     let detailMovieModel: BaseDetailModel = this.detailsMovie;
     let message: string = "Regarde cette pépite, ça vaut le coup d'être regardé : " + detailMovieModel.Title;
     let subject: string = null;

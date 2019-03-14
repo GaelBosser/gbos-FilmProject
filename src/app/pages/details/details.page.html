@@ -15,38 +15,105 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
-  <div>
-    <ion-card *ngIf="detailsMovie">
-      <ion-card-content padding>
-        <div style="color:black;">
-          <p>Titre : {{detailsMovie.Title}}</p>
-          <p>Année de sortie : {{detailsMovie.Year}}</p>
-          <p>Recommandation d'âge : {{detailsMovie.Rated}}</p>
-          <p>Description : {{detailsMovie.Plot}}</p>
-          <p>Type : {{detailsMovie.Type}}</p>
-          <p>Genre : {{detailsMovie.Genre}}</p>
-          <p>Durée : {{detailsMovie.Runtime}}</p>
-          <p>Producteur : {{detailsMovie.Director}}</p>
-          <p>Acteurs : {{detailsMovie.Actors}}</p>
-          <p>Récompenses : {{detailsMovie.Awards}}</p>
-          <p>Notes / Votes : {{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
-          <p>Site web : {{detailsMovie.Website}}</p>
-        </div>
-        <div *ngIf="detailsMovie.Type == 'series'">
-          <span *ngFor="let season of numberSeasonArray;">
-            <p routerLink="/detail/{{detailsMovie.imdbID}}/season/{{season}}">Saison {{season}}</p>
-          </span>
-        </div>
-        <div *ngIf="detailsMovie.Poster == 'N/A', else elseBlockPosterImg">
-          <p>Aucun poster associé à ce film</p>
-        </div>
-        <ng-template #elseBlockPosterImg>
-          <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
-        </ng-template>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
+<ion-content padding *ngIf="detailsMovie">
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <div
+                *ngIf="detailsMovie.Poster == constantesValueApi.defaultFieldUndefinedValue, else elseBlockPosterImg">
+                <p>Aucun poster associé à ce film</p>
+              </div>
+              <ng-template #elseBlockPosterImg>
+                <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
+              </ng-template>
+            </ion-card>
+          </ion-col>
+          <ion-col>
+            <ion-card padding>
+              <div class="description">
+                <h1>Descriptif</h1><br>
+                <p *ngIf="detailsMovie.Title != constantesValueApi.defaultFieldUndefinedValue"><b>Titre: </b>
+                  {{detailsMovie.Title}}</p>
+                <p *ngIf="detailsMovie.Year != constantesValueApi.defaultFieldUndefinedValue"><b>Année de sortie:
+                  </b>{{detailsMovie.Year}}</p>
+                <p *ngIf="detailsMovie.Rated != constantesValueApi.defaultFieldUndefinedValue"><b>Recommandation d'âge
+                    :</b> {{detailsMovie.Rated}}</p>
+                <p *ngIf="detailsMovie.Plot != constantesValueApi.defaultFieldUndefinedValue"><b>Description :</b>
+                  {{detailsMovie.Plot}}</p>
+                <p *ngIf="detailsMovie.Type != constantesValueApi.defaultFieldUndefinedValue"><b>Type :</b>
+                  {{detailsMovie.Type}}</p>
+                <p *ngIf="detailsMovie.Genre != constantesValueApi.defaultFieldUndefinedValue"><b>Genre :</b>
+                  {{detailsMovie.Genre}}</p>
+                <p *ngIf="detailsMovie.Runtime != constantesValueApi.defaultFieldUndefinedValue"><b>Durée :</b>
+                  {{detailsMovie.Runtime}}</p>
+                <p *ngIf="detailsMovie.Director != constantesValueApi.defaultFieldUndefinedValue"><b>Director :</b>
+                  {{detailsMovie.Director}}</p>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button color="primary" expand="block" (click)="toggleFavorite()">
+              Ajouter à mes favoris
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="tertiary" expand="block" (click)="shareMovieEvent()">
+              Partager avec une personne
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="detailsMovie.Type == 'series'">
+          <ion-col>
+            <h1 class="acteurs">Saisons</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="detailsMovie.Type == 'series'">
+          <ion-card *ngFor="let season of numberSeasonArray;">
+            <ion-list>
+              <p class="saisonLink" routerLink="/detail/{{detailsMovie.imdbID}}/season/{{season}}">Saison {{season}}</p>
+            </ion-list>
+          </ion-card>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h1 class="acteurs">Acteurs / Awards et Notes / Site web</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="listActeurs">
+          <ion-card *ngFor="let acteur of listActeurs">
+            <img class="images" src="{{ constantesImages.rootActeurDefaultImage }}" alt="{{acteur}}">
+            <p class="acteurs">{{acteur}}</p>
+          </ion-card>
+          <ion-card padding *ngIf="detailsMovie.Awards">
+            <ion-col>
+              <img class="images" src="{{ constantesImages.rootAwardDefaultImage }}" alt="image awards">
+            </ion-col>
+            <ion-col>
+              <p *ngIf="detailsMovie.Awards != constantesValueApi.defaultFieldUndefinedValue">{{detailsMovie.Awards}}
+              </p>
+              <p *ngIf="detailsMovie.imdbRating != constantesValueApi.defaultFieldUndefinedValue || 
+                  detailsMovie.imdbVotes != constantesValueApi.defaultFieldUndefinedValue">
+                <b>Note / Vote: </b>{{detailsMovie.imdbRating}} / {{detailsMovie.imdbVotes}}</p>
+            </ion-col>
+          </ion-card>
+          <ion-col>
+          </ion-col>
+          <ion-card padding
+            *ngIf="detailsMovie.Website && detailsMovie.Website != constantesValueApi.defaultFieldUndefinedValue">
+            <ion-col>
+              <img class="images" src="{{ constantesImages.rootWebsiteDefaultImage }}" alt="image website">
+            </ion-col>
+            <ion-col>
+              <p><a href="{{detailsMovie.Website}}">{{detailsMovie.Website}}</a></p>
+            </ion-col>
+          </ion-card>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

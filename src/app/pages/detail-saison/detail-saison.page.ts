@@ -1,3 +1,4 @@
+import { AlertType } from './../../utils/displayAlertUtils';
 import { Saison } from './../../models/serie/saison';
 import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
@@ -33,7 +34,7 @@ export class DetailSaisonPage extends BaseDetailPage {
       .subscribe(res => {
         this.detailSeason = res;
         this.setTitlePage();
-      }, err => this.displayAlert.presentAlert("Alert", "", err));
+      }, err => this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenue lors de la récupération du détail de la saison"));
     await this.dismissLoading();
   }
 

@@ -19,14 +19,36 @@
   <ion-list>
     <ion-card>
       <ion-card-content>
-        <div *ngIf="detailEpisode" style="color:black;">
-          <p>Titre {{detailEpisode.Title}}</p>
-          <p>Description {{detailEpisode.Plot}}</p>
-          <p>Sortie {{detailEpisode.Released}}</p>
-          <p>Durée {{detailEpisode.Runtime}}</p>
-          <p>Note / Votes {{detailEpisode.imdbRating}} / {{detailEpisode.imdbVotes}}</p>
+        <div *ngIf="detailEpisode" class="episodePage">
+          <p *ngIf="detailEpisode.Title != constantesValueApi.defaultFieldUndefinedValue"><b>Titre:</b>
+            {{detailEpisode.Title}}</p>
+          <p *ngIf="detailEpisode.Plot != constantesValueApi.defaultFieldUndefinedValue"><b>Description:</b>
+            {{detailEpisode.Plot}}</p>
+          <p *ngIf="detailEpisode.Released != constantesValueApi.defaultFieldUndefinedValue"><b>Sortie:</b>
+            {{detailEpisode.Released}}</p>
+          <p *ngIf="detailEpisode.Runtime != constantesValueApi.defaultFieldUndefinedValue"><b>Durée:</b>
+            {{detailEpisode.Runtime}}</p>
+          <p
+            *ngIf="detailEpisode.imdbRating != constantesValueApi.defaultFieldUndefinedValue || detailEpisode.imdbVotes != constantesValueApi.defaultFieldUndefinedValue">
+            <b>Note / Votes:</b> {{detailEpisode.imdbRating}} / {{detailEpisode.imdbVotes}}
+          </p>
         </div>
       </ion-card-content>
     </ion-card>
   </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" expand="block" (click)="toggleFavorite()">
+          Ajouter à mes favoris
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="tertiary" expand="block" (click)="shareEpisodeEvent()">
+          Partager avec une personne
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

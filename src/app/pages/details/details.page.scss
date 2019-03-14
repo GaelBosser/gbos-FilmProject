@@ -1,5 +1,45 @@
+
+ion-card{
+	text-align: center;
+	color:black;
+	img{
+	  text-align: center;
+	  align-content: center;
+	  align-self: center;
+    }
+}
+.description p{ 
+    font-size: 1.2em;
+    font-family: Georgia, serif;
+    line-height: 2em;
+}
+.description h1{
+    font-family: Georgia, serif;
+}
+.images{
+    width:15em;
+    display:inline-grid;
+    align-content: center;
+    align-self: center;
+    text-align: center;
+}
+.acteurs{
+    text-align: center;
+    font-family: Georgia, serif;
+    line-height: 2em;
+    font-size: 2em;
+}
 .imgPosterResize{
-    border-radius: 10px;
-    max-width:400px;
-    height:auto;
+    width: 25em;
+}
+.saisonLink{
+    width:10em;
+    font-size:1.5em;
+    font-family: Georgia, serif;
+    height:1.5em;
+    display:inline-grid;
+}
+.saisonLink:hover{
+    cursor:pointer;
+    background: #D9D7D7;
 }

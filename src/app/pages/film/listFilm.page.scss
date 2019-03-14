@@ -1,5 +1,29 @@
-.imgPosterResize{
+.imgOverlay img{
+    z-index:1;
     border-radius: 10px;
-    max-width:400px;
-    height:auto;
+    width: 100%;
+    height: auto;
+}
+
+.imgOverlay:hover {
+    cursor:pointer;
+}
+
+.imgOverlay .myOverlay {
+    position:absolute;
+    top:70%;
+    padding: 5% 2%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width:70%; 
+    color: white;
+    z-index:2;
+    border-radius: 5%;
+    background-color: rgba(0,0,0,.5);
+    text-align: center;
+}
+
+ion-card{
+    display:inline-grid;
+    width:20em;
 }

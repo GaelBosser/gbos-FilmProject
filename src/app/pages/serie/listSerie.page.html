@@ -1,47 +1,48 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-title>{{ titlePage }}</ion-title>
-        <button ion-button style="font-size: 1.7em" slot="secondary" (click)="searchbarEventClick($event)">
-          <ion-icon name="md-search"></ion-icon>
-        </button>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar>
+    <ion-title>{{ titlePage }}</ion-title>
+    <button ion-button style="font-size: 1.7em" slot="secondary" (click)="searchbarEventClick($event)">
+      <ion-icon name="md-search"></ion-icon>
+    </button>
+  </ion-toolbar>
+</ion-header>
 
-<ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher une série" [(ngModel)]="searchText" (ionChange)="getSearchBar(typeMovie)"></ion-searchbar>
+<ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher une série" [(ngModel)]="searchText"
+  (ionChange)="getSearchBar(typeMovie)" mode="ios" debounce="2000"></ion-searchbar>
 
-<ion-content padding>
-  <ion-list *ngIf="searchTextBool">
-      <div *ngIf="textIntrouvable" style="color: black;">
-        <p>Aucune série n'a été trouvée pour la recherche suivante : <b>{{searchText}}</b></p>
-      </div>
-      <div *ngFor="let serie of results">
-        <ion-card routerLink="/detail/{{serie.imdbID}}">
-          <ion-card-content padding>
-            <div style="color:black;">
-              <p>{{serie.Title}}</p>
-              <p>Année de sortie : {{serie.Year}}</p>
-              <p>Type : {{serie.Type}}</p>
-            </div>
-            <div *ngIf="serie.Poster == 'N/A', else elseBlockPosterImg">
-              <p>Aucun poster associé à cette série</p>
-            </div>
-            <ng-template #elseBlockPosterImg>
-                <img src={{serie.Poster}} alt={{serie.Title}} class="imgPosterResize">
-            </ng-template>
-          </ion-card-content>
-        </ion-card>
-      </div>
-  </ion-list>
+  <ion-content padding>
+      <ion-list *ngIf="searchTextBool">
+        <div *ngIf="textIntrouvable" style="color: black;">
+          <p>Aucun série n'a été trouvée pour la recherche suivante : <b>{{searchText}}</b></p>
+        </div>
+        <ion-grid>
+          <ion-row justify-content-center align-items-center>
+            <ion-card *ngFor="let serie of results;" class="imgOverlay">
+              <ion-card-content padding routerLink="/detail/{{serie.imdbID}}">
+                <div *ngIf="serie.Poster == constantesValueApi.defaultFieldUndefinedValue, else elseBlockPosterImg">
+                  <img src="{{constantesImages.rootDefaultImage}}" alt={{serie.Title}}>
+                </div>
+                <ng-template #elseBlockPosterImg>
+                  <img src={{serie.Poster}} alt={{serie.Title}}>
+                </ng-template>
+                <div class="myOverlay">
+                  <div class="card-title">{{ serie.Title }}</div>
+                  <div class="card-subtitle">{{ serie.Year}}</div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-row>
+        </ion-grid>
+      </ion-list>
 
-  <ion-infinite-scroll *ngIf="page <= 100 && !endInfiniteScroll, else elseBlockEndInfiniteScroll" (ionInfinite)="(doInfinite($event, typeMovie))">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Chargement des données en cours...">
+  <ion-infinite-scroll *ngIf="page <= 100 && !endInfiniteScroll, else elseBlockEndInfiniteScroll"
+    (ionInfinite)="(doInfinite($event, typeMovie))">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement des données en cours...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
   <ng-template #elseBlockEndInfiniteScroll>
-      <span>Aucune autre donnée à charger pour la recherche suivante : <b>{{searchText}}</b></span>
+    <span>Aucune autre donnée à charger pour la recherche suivante : <b>{{searchText}}</b></span>
   </ng-template>
 
 </ion-content>

@@ -10,16 +10,15 @@
 <ion-content padding>
   <div *ngIf="detailSeason">
     <ion-list>
-      <ion-card *ngFor="let episode of detailSeason.Episodes">
-        <ion-card-content routerLink="/detail/{{id}}/season/{{idSeason}}/episode/{{episode.Episode}}">
-          <div style="color:black;">
-            <p>Épisode {{episode.Episode}}</p>
-            <p>Titre {{episode.Title}}</p>
-            <p>Sortie {{episode.Released}}</p>
-            <p>Note {{episode.imdbRating}}</p>
-          </div>
-        </ion-card-content>
-      </ion-card>
+      <ion-grid>
+        <ion-col>
+          <ion-card *ngFor="let episode of detailSeason.Episodes"
+            routerLink="/detail/{{id}}/season/{{idSeason}}/episode/{{episode.Episode}}" padding>
+            <span><b>Épisode: </b>{{episode.Episode}}</span>
+            <span><b>Titre: </b>{{episode.Title}}</span>
+          </ion-card>
+        </ion-col>
+      </ion-grid>
     </ion-list>
   </div>
 </ion-content>
