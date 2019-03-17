@@ -1,3 +1,4 @@
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { BaseImdbModel } from './../../models/baseImdbModel';
 import { AlertType } from './../../utils/displayAlertUtils';
 import { BaseDetailModel } from './../../models/baseDetailModel';
@@ -24,7 +25,7 @@ export class FavoriePage extends BasePage {
 
   constructor(private favorieMovieService: FavorieMovieService, private navCtrl: NavController, private file: File,
     private platform: Platform, private fileChooser: FileChooser, private api: OmdbServiceService,
-    protected loadingController: LoadingController) {
+    protected loadingController: LoadingController, private socialSharing: SocialSharing) {
     super(loadingController)
     this.converteur = new ConvertorUtils();
     this.favoriteMovies = new Array<BaseDetailModel>();
@@ -109,7 +110,7 @@ export class FavoriePage extends BasePage {
               this.favoriteMovies = JSON.parse(favoris)
             else if (typeImport.toUpperCase().trim() == 'CSV')
               this.favoriteMovies = JSON.parse(this.converteur.CSVToJsonConvertor(favoris));
-            
+
             for (let i = 0; i < this.favoriteMovies.length; i++) {
               this.favorieMovieService.addFavoriteMovie(this.favoriteMovies[i]);
             }
@@ -151,5 +152,36 @@ export class FavoriePage extends BasePage {
       }
       await this.dismissLoading();
     }
+  }
+
+  async presentActionSheetShare() {
+    this.displayAlert.presentActionSheet("Partager mes favoris", [{
+      text: 'JSON',
+      role: 'shareJson',
+      icon: 'document',
+      handler: () => {
+        this.shareFavorisEvent('JSON');
+      }
+    },
+    {
+      text: 'CSV',
+      icon: 'bookmarks',
+      handler: () => {
+        this.shareFavorisEvent('CSV');
+      }
+    }]);
+  }
+
+  shareFavorisEvent(typePartage: string) {
+    this.exportFavoris(typePartage).then(share => {
+      this.socialSharing.shareViaEmail("Voici ci-joint mes favoris de films et séries", "Mes films et séries favoris",
+        null, null, null, this.filePath + this.fileName).then(
+          shareSuccess => {
+            this.file.removeFile(this.filePath, this.fileName);
+            this.displayAlert.presentAlert(AlertType.Succes, "", "Partage de vos favoris avec succès !")
+          }
+        ).catch(err =>
+          this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenue durant le partage de vos favoris."));
+    });
   }
 }

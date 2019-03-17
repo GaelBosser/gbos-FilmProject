@@ -67,7 +67,12 @@ export class DetailsPage extends BaseDetailPage {
 
   private setActorsArray(): void {
     let detailsMovieModel: BaseDetailModel = this.detailsMovie;
-    this.listActeurs = detailsMovieModel.Actors.split(", ", detailsMovieModel.Actors.split(",").length);
+    if (detailsMovieModel.Actors == this.constantesValueApi.defaultFieldUndefinedValue) {
+      this.listActeurs == null;
+    }
+    else {
+      this.listActeurs = detailsMovieModel.Actors.split(", ", detailsMovieModel.Actors.split(",").length);
+    }
   }
 
   toggleFavorite(): void {
