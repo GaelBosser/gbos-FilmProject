@@ -19,7 +19,7 @@
   <ion-card>
     <ion-card-content>
       <ion-grid>
-        <ion-row>
+        <ion-row *ngIf="imagePosterVisible">
           <ion-col>
             <ion-card>
               <div
@@ -27,7 +27,7 @@
                 <p>Aucun poster associé à ce film</p>
               </div>
               <ng-template #elseBlockPosterImg>
-                <img src={{detailsMovie.Poster}} alt={{detailsMovie.Title}} class="imgPosterResize">
+                <img [src]="imageToShow" alt={{detailsMovie.Title}} class="imgPosterResize">
               </ng-template>
             </ion-card>
           </ion-col>

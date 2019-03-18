@@ -1,3 +1,5 @@
+import { BaseImdbModel } from './../../models/baseImdbModel';
+import { PosterOmdbServiceService } from './../../services/omdb/poster/poster-omdb-service.service';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AlertType } from './../../utils/displayAlertUtils';
@@ -21,16 +23,38 @@ export class DetailsPage extends BaseDetailPage {
   numberSeasonArray: Array<number>;
   isFavorite: boolean;
   listActeurs: Array<string>;
+  imageToShow: any;
+  imagePosterVisible: boolean;
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
     protected favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
-    protected socialSharing: SocialSharing) {
+    protected socialSharing: SocialSharing, protected apiPoster: PosterOmdbServiceService) {
     super(api, route, navCtrl, loadingController, socialSharing)
     this.plot = Plot.Full;
     this.numberSeasonArray = new Array<number>();
     this.isFavorite = false;
     this.titlePage = "Fiche détails";
     this.listActeurs = new Array<string>();
+  }
+
+
+
+  private createImageFromBlob(image: Blob) {
+    var reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onloadend = () => {
+      this.imageToShow = reader.result
+    }
+  }
+
+  getImageFromService() {
+    let detailsMovieImdbModel: BaseImdbModel = this.detailsMovie;
+    this.apiPoster.getPosterById(detailsMovieImdbModel.imdbID).subscribe(data => {
+      this.createImageFromBlob(data);
+      this.imagePosterVisible = true;
+    }, error => {
+      this.imagePosterVisible = false;
+    });
   }
 
   ngOnInit() {
@@ -53,6 +77,7 @@ export class DetailsPage extends BaseDetailPage {
         this.detailsMovie = res;
         this.setSeasonArray();
         this.setActorsArray();
+        this.getImageFromService();
       }, err => this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenue durant l'appel au serveur"));
     await this.dismissLoading();
   }

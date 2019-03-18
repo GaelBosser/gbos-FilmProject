@@ -1,3 +1,4 @@
+import { AccessApiOmdbConstantes } from './../../constantes/accessApiOmdbConstantes';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
 import { Saison } from './../../models/serie/saison';
 import { Search } from './../../models/search/search';
@@ -13,7 +14,8 @@ import { Episode } from 'src/app/models/serie/episode';
 })
 export class OmdbServiceService {
 
-  private readonly apiUrl: string = "http://www.omdbapi.com/?apikey=75522b56";
+  private readonly accessApi: AccessApiOmdbConstantes = AccessApiOmdbConstantes.getInstance();
+  private readonly apiUrl: string = "http://www.omdbapi.com/?apikey=" + this.accessApi.ApiKeyValue;
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +23,7 @@ export class OmdbServiceService {
     const url = `${this.apiUrl}&s=${title}&type=${type}&page=${page}`;
     return this.http.get(url).pipe(map((detailSearch: Search) => detailSearch));
   }
-  
+
   getDetailMovieById(id: string, plot: Plot): Observable<BaseDetailModel> {
     const url = `${this.apiUrl}&i=${id}&plot=${plot}`;
     return this.http.get(url).pipe(map((detailMovie: BaseDetailModel) => detailMovie));

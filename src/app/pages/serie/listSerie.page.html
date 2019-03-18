@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-searchbar *ngIf="displaySearchBar" placeholder="Rechercher une série" [(ngModel)]="searchText"
-  (ionChange)="getSearchBar(typeMovie)" mode="ios" debounce="2000"></ion-searchbar>
+  (ionChange)="getSearchBar(typeMovie)" mode="ios" debounce="1300"></ion-searchbar>
 
   <ion-content padding>
       <ion-list *ngIf="searchTextBool">
