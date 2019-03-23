@@ -1,3 +1,5 @@
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,6 +27,8 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
     SplashScreen,
     File,
     FileTransfer,
+    SocialSharing,
+    FileChooser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

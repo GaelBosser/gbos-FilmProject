@@ -5,7 +5,7 @@ import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Episode } from 'src/app/models/serie/episode';
 import { isUndefined } from 'util';
@@ -25,8 +25,8 @@ export class DetailEpisodePage extends BaseDetailPage {
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
     private favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
-    protected socialSharing: SocialSharing) {
-    super(api, route, navCtrl, loadingController, socialSharing)
+    protected socialSharing: SocialSharing, protected alertController: AlertController, protected actionSheetController: ActionSheetController) {
+    super(api, route, navCtrl, loadingController, socialSharing, alertController, actionSheetController)
     this.isFavorite = false;
   }
 

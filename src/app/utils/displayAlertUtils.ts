@@ -11,12 +11,7 @@ export enum AlertType {
 
 export class DisplayAlertUtils implements IAlert {
 
-  alertController: AlertController;
-  actionSheetController: ActionSheetController;
-
-  constructor() {
-    this.alertController = new AlertController();
-    this.actionSheetController = new ActionSheetController();
+  constructor(private alertController: AlertController, private actionSheetController: ActionSheetController) {
   }
 
   async presentAlert(headerAlert: string, subHeaderAlert: string, messageAlert: string, buttonsAlert: (string | AlertButton)[] = ['OK']): Promise<void> {

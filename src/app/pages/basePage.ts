@@ -1,6 +1,6 @@
 import { DisplayAlertUtils } from './../utils/displayAlertUtils';
 import { OnInit } from '@angular/core';
-import { LoadingController, Platform } from '@ionic/angular';
+import { LoadingController, Platform, AlertController, ActionSheetController } from '@ionic/angular';
 import { RootImageConstantes } from '../constantes/rootImageConstantes';
 import { DefaultValueApiConstantes } from '../constantes/defaultValueApiConstantes';
 
@@ -12,8 +12,9 @@ export class BasePage implements OnInit {
     protected constantesImages: RootImageConstantes;
     protected constantesValueApi: DefaultValueApiConstantes;
 
-    constructor(protected loadingController: LoadingController) {
-        this.displayAlert = new DisplayAlertUtils();
+    constructor(protected loadingController: LoadingController, protected alertController: AlertController,
+        protected actionSheetController: ActionSheetController) {
+        this.displayAlert = new DisplayAlertUtils(alertController, actionSheetController);
         this.constantesImages = RootImageConstantes.getInstance();
         this.constantesValueApi = DefaultValueApiConstantes.getInstance();
     }

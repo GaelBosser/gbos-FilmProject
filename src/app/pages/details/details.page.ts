@@ -10,7 +10,7 @@ import { FavorieMovieService } from './../../services/favoris/favorie-movie.serv
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, LoadingController, Platform } from '@ionic/angular';
+import { NavController, LoadingController, Platform, AlertController, ActionSheetController } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 
 @Component({
@@ -31,8 +31,9 @@ export class DetailsPage extends BaseDetailPage {
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
     protected favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
     protected socialSharing: SocialSharing, protected apiPoster: PosterOmdbServiceService, private platform: Platform,
-    private transfer: FileTransfer, private file: File, private posterApi: PosterOmdbServiceService) {
-    super(api, route, navCtrl, loadingController, socialSharing)
+    private transfer: FileTransfer, private file: File, private posterApi: PosterOmdbServiceService, protected alertController: AlertController,
+    protected actionSheetController: ActionSheetController) {
+    super(api, route, navCtrl, loadingController, socialSharing, alertController, actionSheetController)
     this.plot = Plot.Full;
     this.numberSeasonArray = new Array<number>();
     this.isFavorite = false;

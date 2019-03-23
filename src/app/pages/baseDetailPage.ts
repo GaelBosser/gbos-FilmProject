@@ -1,5 +1,5 @@
 import { AlertType } from './../utils/displayAlertUtils';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { BasePage } from './basePage';
 import { OmdbServiceService } from '../services/omdb/omdb-service.service';
@@ -10,8 +10,9 @@ export class BaseDetailPage extends BasePage {
     id: string;
 
     constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
-        protected loadingController: LoadingController, protected socialSharing: SocialSharing) {
-        super(loadingController)
+        protected loadingController: LoadingController, protected socialSharing: SocialSharing, protected alertController: AlertController,
+        protected actionSheetController: ActionSheetController) {
+        super(loadingController, alertController, actionSheetController)
     }
 
     ngOnInit() {
@@ -20,7 +21,7 @@ export class BaseDetailPage extends BasePage {
     }
 
     backButtonClickEvent() {
-        this.navCtrl.goBack();
+        this.navCtrl.back();
     }
 
     shareMovie(message?: string, subject?: string, file?: string | string[], url?: string) {

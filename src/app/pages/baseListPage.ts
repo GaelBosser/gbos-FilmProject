@@ -1,4 +1,4 @@
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { AlertType } from './../utils/displayAlertUtils';
 import { TypeMovie } from './../models/typeMovie/typeMovie';
 import { BaseImdbModel } from './../models/baseImdbModel';
@@ -19,8 +19,9 @@ export class BaseListPage extends BasePage {
     protected displaySearchBar: boolean;
     protected endInfiniteScroll: boolean;
 
-    constructor(protected api: OmdbServiceService, protected loadingController: LoadingController) {
-        super(loadingController)
+    constructor(protected api: OmdbServiceService, protected loadingController: LoadingController,
+        protected alertController: AlertController, protected actionSheetController: ActionSheetController) {
+        super(loadingController, alertController, actionSheetController)
         this.results = new Array<BaseImdbModel>();
         this.displaySearchBar = true;
         this.page = 1;

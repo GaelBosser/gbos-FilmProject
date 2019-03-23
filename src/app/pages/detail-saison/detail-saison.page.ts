@@ -4,7 +4,7 @@ import { BaseDetailPage } from './../baseDetailPage';
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Component({
@@ -18,8 +18,9 @@ export class DetailSaisonPage extends BaseDetailPage {
   detailSeason: Saison;
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
-    protected loadingController: LoadingController, protected socialSharing: SocialSharing) {
-    super(api, route, navCtrl, loadingController, socialSharing)
+    protected loadingController: LoadingController, protected socialSharing: SocialSharing, protected alertController: AlertController,
+    protected actionSheetController: ActionSheetController) {
+    super(api, route, navCtrl, loadingController, socialSharing, alertController, actionSheetController)
   }
 
   ngOnInit() {

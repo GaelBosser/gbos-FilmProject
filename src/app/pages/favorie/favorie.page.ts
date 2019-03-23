@@ -6,7 +6,7 @@ import { BasePage } from './../basePage';
 import { ConvertorUtils } from './../../utils/ConvertorUtils';
 import { FavorieMovieService } from './../../services/favoris/favorie-movie.service';
 import { Component } from '@angular/core';
-import { NavController, Platform, LoadingController } from '@ionic/angular';
+import { NavController, Platform, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { OmdbServiceService } from 'src/app/services/omdb/omdb-service.service';
@@ -25,8 +25,9 @@ export class FavoriePage extends BasePage {
 
   constructor(private favorieMovieService: FavorieMovieService, private navCtrl: NavController, private file: File,
     private platform: Platform, private fileChooser: FileChooser, private api: OmdbServiceService,
-    protected loadingController: LoadingController, private socialSharing: SocialSharing) {
-    super(loadingController)
+    protected loadingController: LoadingController, private socialSharing: SocialSharing, protected alertController: AlertController,
+    protected actionSheetController: ActionSheetController) {
+    super(loadingController, alertController, actionSheetController)
     this.converteur = new ConvertorUtils();
     this.favoriteMovies = new Array<BaseDetailModel>();
     this.titlePage = "Liste de favoris";
