@@ -1,7 +1,7 @@
 export class RootImageConstantes {
 
     private static imagesConstantes: RootImageConstantes;
-    private readonly defaultImage: string = "assets/imagePoster/noposteravailable.jpg";
+    private readonly defaultImage: string = "assets/imagePoster/defaultImage.png";
     private readonly acteurDefaultImage: string = "assets/imageActor/acteur.png";
     private readonly awardDefaultImage: string = "assets/imageAward/awards.png";
     private readonly websiteDefaultImage: string = "assets/imageWebsite/website.jpg";

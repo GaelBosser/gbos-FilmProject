@@ -1,3 +1,4 @@
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { BaseImdbModel } from './../../models/baseImdbModel';
 import { PosterOmdbServiceService } from './../../services/omdb/poster/poster-omdb-service.service';
 import { TypeMovie } from 'src/app/models/typeMovie/typeMovie';
@@ -9,7 +10,8 @@ import { FavorieMovieService } from './../../services/favoris/favorie-movie.serv
 import { OmdbServiceService } from '../../services/omdb/omdb-service.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, Platform } from '@ionic/angular';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-details',
@@ -28,7 +30,8 @@ export class DetailsPage extends BaseDetailPage {
 
   constructor(protected api: OmdbServiceService, protected route: ActivatedRoute, protected navCtrl: NavController,
     protected favoriteMovieService: FavorieMovieService, protected loadingController: LoadingController,
-    protected socialSharing: SocialSharing, protected apiPoster: PosterOmdbServiceService) {
+    protected socialSharing: SocialSharing, protected apiPoster: PosterOmdbServiceService, private platform: Platform,
+    private transfer: FileTransfer, private file: File, private posterApi: PosterOmdbServiceService) {
     super(api, route, navCtrl, loadingController, socialSharing)
     this.plot = Plot.Full;
     this.numberSeasonArray = new Array<number>();
@@ -55,6 +58,21 @@ export class DetailsPage extends BaseDetailPage {
     }, error => {
       this.imagePosterVisible = false;
     });
+  }
+
+  downloadPosterEvent() {
+    if (this.platform.is('android')) {
+      if (this.imageToShow != this.constantesValueApi.defaultFieldUndefinedValue) {
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        let url: string = this.posterApi.getUrlPoster(this.id);
+        let mediasDetail: BaseDetailModel = this.detailsMovie;
+        fileTransfer.download(url, this.file.externalDataDirectory + mediasDetail.Title + '.jpg').then((entry) => {
+          this.displayAlert.presentAlert(AlertType.Succes, "Téléchargement terminé", "Chemin du fichier : " + entry.toURL());
+        }, (error) => {
+          this.displayAlert.presentAlert(AlertType.Erreur, "", "Une erreur est survenue lors du téléchargement du poster")
+        });
+      }
+    }
   }
 
   ngOnInit() {

@@ -17,4 +17,9 @@ export class PosterOmdbServiceService {
     const url = `${this.apiPosterUrl}&i=${id}&h=700`;
     return this.http.get(url, { responseType: 'blob' });
   }
+
+  getUrlPoster(id:string): string {
+    const url = `${this.apiPosterUrl}&i=${id}&h=700`;
+    return url;
+  }
 }

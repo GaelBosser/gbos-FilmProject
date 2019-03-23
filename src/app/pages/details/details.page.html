@@ -28,6 +28,9 @@
               </div>
               <ng-template #elseBlockPosterImg>
                 <img [src]="imageToShow" alt={{detailsMovie.Title}} class="imgPosterResize">
+                <button ion-button secondary style="font-size: 1.3em" (click)="downloadPosterEvent()">
+                  Télécharger le poster
+                </button>
               </ng-template>
             </ion-card>
           </ion-col>

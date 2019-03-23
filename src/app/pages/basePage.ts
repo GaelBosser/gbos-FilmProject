@@ -1,6 +1,6 @@
 import { DisplayAlertUtils } from './../utils/displayAlertUtils';
 import { OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 import { RootImageConstantes } from '../constantes/rootImageConstantes';
 import { DefaultValueApiConstantes } from '../constantes/defaultValueApiConstantes';
 
