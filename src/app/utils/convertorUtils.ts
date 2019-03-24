@@ -5,7 +5,7 @@ export class ConvertorUtils implements IConvertor {
 
     constructor() { }
 
-    JSONToCSVConvertor(jsonData: Array<BaseImdbModel>, showLabel: boolean) {
+    jsonToCSVConvertor(jsonData: Array<BaseImdbModel>, showLabel: boolean): string {
 
         let arrData: any = typeof jsonData != 'object' ? JSON.parse(jsonData) : jsonData;
         let CSV: string = '';
@@ -31,8 +31,8 @@ export class ConvertorUtils implements IConvertor {
         return CSV;
     }
 
-    CSVToJsonConvertor(csvFile: string) {
-        let array = this.CSVToArray(csvFile, ",");
+    csvToJsonConvertor(csvFile: string): string {
+        let array = this.csvToArray(csvFile, ",");
         let objArray = [];
         for (let i = 1; i < array.length - 1; i++) {
             objArray[i - 1] = {};
@@ -46,7 +46,7 @@ export class ConvertorUtils implements IConvertor {
         return str;
     }
 
-    CSVToArray(strData: string, strDelimiter: string) {
+    csvToArray(strData: string, strDelimiter: string): any[][] {
         strDelimiter = (strDelimiter || ",");
         let objPattern: RegExp = new RegExp((
             "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
