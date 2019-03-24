@@ -110,7 +110,7 @@ export class FavoriePage extends BasePage {
             if (typeImport.toUpperCase().trim() == 'JSON')
               this.favoriteMovies = JSON.parse(favoris)
             else if (typeImport.toUpperCase().trim() == 'CSV')
-              this.favoriteMovies = JSON.parse(this.converteur.CSVToJsonConvertor(favoris));
+              this.favoriteMovies = JSON.parse(this.converteur.csvToJsonConvertor(favoris));
 
             for (let i = 0; i < this.favoriteMovies.length; i++) {
               this.favorieMovieService.addFavoriteMovie(this.favoriteMovies[i]);
@@ -145,7 +145,7 @@ export class FavoriePage extends BasePage {
         if (typeExport.toUpperCase().trim() == 'JSON')
           strToExport = JSON.stringify(favorisToExport);
         else if (typeExport.toUpperCase().trim() == 'CSV')
-          strToExport = this.converteur.JSONToCSVConvertor(favorisToExport, true);
+          strToExport = this.converteur.jsonToCSVConvertor(favorisToExport, true);
 
         this.file.writeFile(this.filePath, this.fileName, strToExport, { replace: true }).then(success =>
           this.displayAlert.presentAlert(AlertType.Succes, "Favoris exporté", "Chemin du fichier : " + this.filePath + this.fileName))
